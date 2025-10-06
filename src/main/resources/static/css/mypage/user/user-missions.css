@@ -1,0 +1,125 @@
+.mypage-title {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+
+/* 팝업 카드 전체 */
+.popup-card {
+    display: flex;
+    align-items: stretch;   /* 이미지와 같은 높이로 info 늘리기 */
+    margin-bottom: 16px;
+}
+
+/* 이미지 래퍼 */
+.popup-image-wrapper {
+    width: 200px;
+    height: 300px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.popup-image.placeholder {
+    font-size: 0.75rem;
+    color: #888;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* 텍스트 영역 */
+.popup-info {
+    padding: 10px;
+    margin-left: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;  /* 세로 배치 */
+    min-height: 100px;       /* 카드 높이가 일정하게 유지되도록 */
+}
+
+/* 버튼 영역을 항상 하단에 붙이기 */
+.popup-action {
+    margin-bottom: 5px;
+    margin-top: auto;        /* 남은 공간을 밀어내려 항상 바닥으로 */
+    align-self: flex-start;  /* 왼쪽 정렬 (원하면 flex-end로 바꿔서 오른쪽 정렬 가능) */
+}
+
+
+.popup-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    color: #333;
+}
+
+.popup-summary {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.popup-link {
+    font-size: 0.85rem;
+    color: #5a5a5a;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.popup-link:hover {
+    text-decoration: underline;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 전체 가운데 */
+    position: relative; /* back-btn 절대 위치용 */
+    padding: 12px 16px;
+    background: #fff;
+
+}
+
+.page-title {
+    font-size: 18px;
+    font-weight: bolder;
+    color: #666;
+}
+
+.my-mission-card {
+    text-align: center;
+    padding: 20px;
+}
+
+.mypage-subtext {
+    color: #777;
+    font-size: 14px;
+    margin: 8px 0 16px;
+}
+
+.go-missions-btn {
+    padding: 10px 20px;
+    background: #4a6cf7;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.go-missions-btn:hover {
+    background: #3a5bd7;
+}

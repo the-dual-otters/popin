@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">POPIN - 팝업 리뷰</title>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/review-list.css">
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content" id="main-content">
+        <div class="review-list-container">
+            <!-- 팝업 정보 헤더 -->
+            <div class="popup-header" id="popupHeader">
+                <div class="popup-header-loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+
+            <!-- 리뷰 통계 및 액션 -->
+            <div class="review-summary">
+                <div class="review-stats" id="reviewStats">
+                    <div class="stats-loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+
+                <div class="review-actions">
+                    <button class="write-review-btn" id="writeReviewBtn">
+                        <span>✏️</span>
+                        리뷰 작성
+                    </button>
+                </div>
+            </div>
+
+            <!-- 정렬 필터 -->
+            <div class="filter-section">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-sort="latest">최신순</button>
+                    <button class="filter-btn" data-sort="rating_high">평점 높은순</button>
+                    <button class="filter-btn" data-sort="rating_low">평점 낮은순</button>
+                </div>
+            </div>
+
+            <!-- 리뷰 목록 -->
+            <div class="reviews-container">
+                <div class="reviews-list" id="reviewsList">
+                    <div class="reviews-loading">
+                        <div class="loading-spinner"></div>
+                        <p>리뷰를 불러오는 중...</p>
+                    </div>
+                </div>
+
+                <!-- 페이지네이션 -->
+                <div class="pagination-container" id="paginationContainer" style="display: none;">
+                    <button class="load-more-btn" id="loadMoreBtn">
+                        더 많은 리뷰 보기
+                    </button>
+                </div>
+            </div>
+
+            <!-- 리뷰 없을 때 -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">📝</div>
+                <h3>아직 작성된 리뷰가 없습니다</h3>
+                <p>이 팝업의 첫 번째 리뷰를 작성해보세요!</p>
+                <button class="write-first-review-btn" id="writeFirstReviewBtn">
+                    첫 리뷰 작성하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<script src="/js/review-list.js"></script>
+
+<!-- 애플리케이션 초기화 -->
+<script>
+    // 페이지 로드 시 헤더/푸터 로드 및 리뷰 목록 페이지 초기화
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+
+        // URL에서 팝업 ID 가져오기
+        const pathParts = window.location.pathname.split('/');
+        const popupId = pathParts[3]; // /reviews/popup/{id} 에서 {id} 부분
+
+        if (popupId && /^\d+$/.test(popupId)) {
+            const manager = new ReviewListManager(popupId);
+            await manager.initialize();
+        } else {
+            alert('잘못된 접근입니다.');
+            window.history.back();
+        }
+    });
+</script>
+
+<style>
+    /* 리뷰 목록 페이지 전용 스타일 */
+    .review-list-container {
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* 팝업 헤더 */
+    .popup-header {
+        margin-bottom: 24px;
+    }
+
+    .popup-header-loading {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .popup-header-content {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 20px;
+        background: #F8F9FA;
+        border-radius: 12px;
+    }
+
+    .popup-thumbnail {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        object-fit: cover;
+    }
+
+    .popup-info h1 {
+        margin: 0 0 8px 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1F2937;
+    }
+
+    .popup-period {
+        font-size: 14px;
+        color: #6B7280;
+        margin: 0 0 8px 0;
+    }
+
+    .popup-status {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .popup-status.active {
+        background: #DCFCE7;
+        color: #166534;
+    }
+
+    .popup-status.ended {
+        background: #FEE2E2;
+        color: #991B1B;
+    }
+
+    /* 리뷰 요약 */
+    .review-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-stats {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .stats-loading {
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .rating-display {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .stars {
+        display: flex;
+        gap: 2px;
+    }
+
+    .star {
+        color: #FFD700;
+        font-size: 20px;
+    }
+
+    .star.empty {
+        color: #E5E7EB;
+    }
+
+    .rating-text {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1F2937;
+    }
+
+    .review-count {
+        font-size: 16px;
+        color: #6B7280;
+    }
+
+    .write-review-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #4B5AE4;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .write-review-btn:hover {
+        background: #5856F0;
+    }
+
+    /* 필터 섹션 */
+    .filter-section {
+        margin-bottom: 20px;
+    }
+
+    .filter-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .filter-btn {
+        padding: 10px 16px;
+        border: 1px solid #E5E7EB;
+        background: white;
+        border-radius: 20px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+        background: #4B5AE4;
+        color: white;
+        border-color: #4B5AE4;
+    }
+
+    .filter-btn:hover:not(.active) {
+        border-color: #4B5AE4;
+        color: #4B5AE4;
+    }
+
+    /* 리뷰 목록 */
+    .reviews-container {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .reviews-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px;
+        gap: 16px;
+    }
+
+    .review-item {
+        padding: 24px;
+        border-bottom: 1px solid #F3F4F6;
+        transition: background-color 0.2s;
+    }
+
+    .review-item:last-child {
+        border-bottom: none;
+    }
+
+    .review-item:hover {
+        background: #F9FAFB;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+    }
+
+    .review-rating {
+        display: flex;
+        gap: 2px;
+    }
+
+    .review-star {
+        color: #FFD700;
+        font-size: 16px;
+    }
+
+    .review-star.empty {
+        color: #E5E7EB;
+    }
+
+    .review-date {
+        color: #6B7280;
+        font-size: 14px;
+    }
+
+    .review-content {
+        color: #374151;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 16px;
+    }
+
+    .reviewer-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .reviewer-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .reviewer-details {
+        flex: 1;
+    }
+
+    .reviewer-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin: 0;
+    }
+
+    .reviewer-badge {
+        font-size: 12px;
+        color: #6B7280;
+        margin: 2px 0 0 0;
+    }
+
+    /* 페이지네이션 */
+    .pagination-container {
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #F3F4F6;
+    }
+
+    .load-more-btn {
+        padding: 12px 32px;
+        background: #F8F9FA;
+        border: 1px solid #E5E7EB;
+        border-radius: 8px;
+        color: #4B5AE4;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .load-more-btn:hover {
+        background: #F3F4F6;
+        border-color: #4B5AE4;
+    }
+
+    .load-more-btn:disabled {
+        background: #F9FAFB;
+        color: #D1D5DB;
+        cursor: not-allowed;
+    }
+
+    /* 빈 상태 */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-icon {
+        font-size: 64px;
+        margin-bottom: 16px;
+        opacity: 0.6;
+    }
+
+    .empty-state h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #374151;
+        margin: 0 0 8px 0;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+        color: #6B7280;
+        margin: 0 0 24px 0;
+    }
+
+    .write-first-review-btn {
+        padding: 12px 24px;
+        background: #4B5AE4;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .write-first-review-btn:hover {
+        background: #5856F0;
+    }
+
+    /* 로딩 스피너 */
+    .loading-spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid #E5E7EB;
+        border-top: 3px solid #4B5AE4;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+        .review-summary {
+            flex-direction: column;
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        .review-stats {
+            justify-content: center;
+        }
+
+        .filter-buttons {
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .filter-btn {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .popup-header-content {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+</body>
+</html>

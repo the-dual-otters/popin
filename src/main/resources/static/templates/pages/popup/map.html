@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">POPIN - 지도</title>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eaef006c7d0c88e0935a7d8745e99144"></script>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/map.css">
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content" id="main-content">
+        <div class="map-container">
+            <div id="kakao-map" class="kakao-map"></div>
+        </div>
+        <div id="selected-popup-section" class="selected-popup-section"></div>
+        <div class="nearby-section">
+            <h2 class="section-title">내 근처 팝업</h2>
+            <div class="category-filters" id="category-filters">
+                <button class="category-btn active" data-category="">전체</button>
+                <button class="category-btn" data-category="패션">패션</button>
+                <button class="category-btn" data-category="반려동물">반려동물</button>
+                <button class="category-btn" data-category="게임">게임</button>
+                <button class="category-btn" data-category="캐릭터/IP">캐릭터/IP</button>
+                <button class="category-btn" data-category="문화/콘텐츠">문화/콘텐츠</button>
+                <button class="category-btn" data-category="연예">연예</button>
+                <button class="category-btn" data-category="여행/레저/스포츠">여행/레저/스포츠</button>
+            </div>
+            <div class="popup-list" id="popup-list"></div>
+        </div>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<!-- 애플리케이션 초기화 -->
+<script>
+    // 페이지 로드 시 헤더/푸터 로드 및 지도 페이지 초기화
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+
+        // URL 파라미터에서 필터 조건 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const region = urlParams.get('region');
+        const category = urlParams.get('category');
+
+        // 지도 페이지 초기화
+        const manager = new MapPageManager();
+        await manager.initialize();
+
+        // 초기 필터 조건이 있으면 적용
+        if (region || category) {
+            manager.applyFilters({
+                region: region,
+                category: category
+            });
+        }
+    });
+</script>
+</body>
+</html>

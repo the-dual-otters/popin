@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">POPIN - 리뷰 작성</title>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/review-create.css">
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content" id="main-content">
+        <div class="review-create-container">
+            <!-- 팝업 정보 표시 -->
+            <div class="popup-info-card" id="popupInfoCard">
+                <div class="popup-info-loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+
+            <!-- 리뷰 작성 폼 -->
+            <div class="review-form-container">
+                <h2 class="form-title">리뷰 작성</h2>
+
+                <form id="reviewForm" class="review-form">
+                    <!-- 평점 입력 -->
+                    <div class="form-group">
+                        <label class="form-label">평점을 선택해주세요</label>
+                        <div class="rating-input" id="ratingInput">
+                            <span class="rating-star" data-rating="1">★</span>
+                            <span class="rating-star" data-rating="2">★</span>
+                            <span class="rating-star" data-rating="3">★</span>
+                            <span class="rating-star" data-rating="4">★</span>
+                            <span class="rating-star" data-rating="5">★</span>
+                        </div>
+                        <div class="rating-labels">
+                            <span class="rating-label" data-rating="1">매우 나쁨</span>
+                            <span class="rating-label" data-rating="2">나쁨</span>
+                            <span class="rating-label" data-rating="3">보통</span>
+                            <span class="rating-label" data-rating="4">좋음</span>
+                            <span class="rating-label" data-rating="5">매우 좋음</span>
+                        </div>
+                    </div>
+
+                    <!-- 리뷰 내용 입력 -->
+                    <div class="form-group">
+                        <label class="form-label">리뷰 내용</label>
+                        <textarea
+                                class="review-textarea"
+                                id="reviewContent"
+                                placeholder="팝업 스토어에 대한 솔직한 후기를 남겨주세요.&#10;방문 경험, 전시 내용, 굿즈, 서비스 등에 대해 자유롭게 작성해주세요. (10자 이상 1000자 이하)"
+                                maxlength="1000"
+                        ></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span>/1000
+                        </div>
+                        <div class="input-hint">
+                            최소 10자 이상 작성해주세요.
+                        </div>
+                    </div>
+
+                    <!-- 제출 버튼 -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">취소</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>리뷰 등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 로딩 오버레이 -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p>리뷰를 등록하는 중...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<script src="/js/review-create.js"></script>
+
+<!-- 애플리케이션 초기화 -->
+<script>
+    // 페이지 로드 시 헤더/푸터 로드 및 리뷰 작성 페이지 초기화
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+
+        // URL에서 팝업 ID 가져오기
+        const pathParts = window.location.pathname.split('/');
+        const popupId = pathParts[3]; // /reviews/popup/{id}/create 에서 {id} 부분
+
+        if (popupId && /^\d+$/.test(popupId)) {
+            const manager = new ReviewCreateManager(popupId);
+            await manager.initialize();
+        } else {
+            alert('잘못된 접근입니다.');
+            window.history.back();
+        }
+    });
+</script>
+
+<style>
+    /* 리뷰 작성 페이지 전용 스타일 */
+    .review-create-container {
+        padding: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .popup-info-card {
+        background: #F8F9FA;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+    }
+
+    .popup-info-loading {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .popup-info-content {
+        display: flex;
+        gap: 12px;
+    }
+
+    .popup-thumbnail {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .popup-details h3 {
+        margin: 0 0 4px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1F2937;
+    }
+
+    .popup-period {
+        font-size: 14px;
+        color: #6B7280;
+        margin: 0;
+    }
+
+    .review-form-container {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 24px 0;
+        color: #1F2937;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 16px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 12px;
+    }
+
+    .rating-input {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+    .rating-star {
+        font-size: 36px;
+        color: #E5E7EB;
+        cursor: pointer;
+        transition: color 0.2s;
+        user-select: none;
+    }
+
+    .rating-star.active,
+    .rating-star:hover {
+        color: #FFD700;
+    }
+
+    .rating-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+    }
+
+    .rating-label {
+        font-size: 12px;
+        color: #6B7280;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+
+    .rating-label.active {
+        opacity: 1;
+        color: #4B5AE4;
+        font-weight: 500;
+    }
+
+    .review-textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 16px;
+        border: 2px solid #E5E7EB;
+        border-radius: 12px;
+        font-size: 16px;
+        font-family: inherit;
+        resize: vertical;
+        line-height: 1.5;
+        transition: border-color 0.2s;
+    }
+
+    .review-textarea:focus {
+        outline: none;
+        border-color: #4B5AE4;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .char-count {
+        text-align: right;
+        font-size: 14px;
+        color: #6B7280;
+        margin-top: 8px;
+    }
+
+    .char-count.over-limit {
+        color: #EF4444;
+    }
+
+    .input-hint {
+        font-size: 14px;
+        color: #6B7280;
+        margin-top: 4px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-secondary {
+        background: #F3F4F6;
+        color: #374151;
+    }
+
+    .btn-secondary:hover {
+        background: #E5E7EB;
+    }
+
+    .btn-primary {
+        background: #4B5AE4;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #5856F0;
+    }
+
+    .btn-primary:disabled {
+        background: #D1D5DB;
+        cursor: not-allowed;
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .loading-content {
+        background: white;
+        padding: 32px;
+        border-radius: 16px;
+        text-align: center;
+        max-width: 280px;
+    }
+
+    .loading-content p {
+        margin: 16px 0 0 0;
+        color: #374151;
+        font-weight: 500;
+    }
+
+    .loading-spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid #E5E7EB;
+        border-top: 3px solid #4B5AE4;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+</body>
+</html>

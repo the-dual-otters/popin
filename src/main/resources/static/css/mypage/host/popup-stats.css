@@ -1,0 +1,168 @@
+/* ===== 공통 ===== */
+.main-content {
+    background: #f8fafc;
+    padding: 20px;
+    min-height: 100vh;
+}
+.block {
+    margin-bottom: 24px;
+}
+
+/* 블록 타이틀 */
+.block-title {
+    background: #4B5AE4 !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    margin-bottom: 24px !important;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3) !important;
+    color: white !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    margin: 0 0 24px 0 !important;
+}
+
+/* 통계 카드 */
+.chart-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.chart-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-card h4::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+}
+
+/* 차트 영역 */
+.chart-card canvas {
+    width: 100% !important;
+    height: 280px !important;
+    border-radius: 12px;
+}
+
+/* 로딩 상태 */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    color: #718096;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* 에러 상태 */
+.error {
+    background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+    border: 1px solid #fc8181;
+    border-radius: 12px;
+    padding: 20px;
+    color: #c53030;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* 데이터 없음 상태 */
+.no-data {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    color: #718096;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* 통계 카드별 개별 스타일 */
+.chart-card:nth-child(2) {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.05) 100%);
+}
+
+.chart-card:nth-child(3) {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%);
+}
+
+.chart-card:nth-child(4) {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(217, 119, 6, 0.05) 100%);
+}
+
+.chart-card:nth-child(5) {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(220, 38, 38, 0.05) 100%);
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+    .main-content {
+        padding: 16px;
+    }
+
+    .chart-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .chart-card h4 {
+        font-size: 14px;
+    }
+
+    .chart-card canvas {
+        height: 220px !important;
+    }
+
+    .loading {
+        height: 150px;
+        font-size: 13px;
+    }
+
+    .block-title {
+        padding: 16px !important;
+        font-size: 16px !important;
+    }
+}
+.period-buttons {
+    display: flex;
+    gap: 8px;
+    margin: 12px 16px 20px 16px;
+}
+
+.btn-period {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #2563eb;
+    background: white;
+    color: #2563eb;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-period:hover {
+    background: #2563eb;
+    color: white;
+}

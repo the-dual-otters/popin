@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일반 신고 관리 - POPPIN</title>
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/admin-inquiry.css">
+</head>
+<body>
+<div class="admin-container">
+    <div id="admin-header-container"></div>
+    <div class="main-content" id="main-content">
+    <!-- 페이지 제목 -->
+    <div class="page-header">
+        <button class="back-button" onclick="goBack()" aria-label="뒤로가기">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 6 9 12 15 18"></polyline>
+            </svg>
+        </button>
+        <h1>일반 신고 관리</h1>
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-label">총 신고:</span>
+                <span class="stat-value" id="totalCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">대기중:</span>
+                <span class="stat-value pending" id="pendingCount">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 필터 및 검색 영역 -->
+    <div class="filter-container">
+        <div class="filter-group">
+            <label for="statusFilter">상태:</label>
+            <select id="statusFilter">
+                <option value="">전체</option>
+                <option value="OPEN">대기중</option>
+                <option value="IN_PROGRESS">처리중</option>
+                <option value="CLOSED">완료</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="searchKeyword">검색:</label>
+            <input type="text" id="searchKeyword" placeholder="이메일 검색...">
+        </div>
+        <button class="button button-primary" id="searchBtn">검색</button>
+        <button class="button button-secondary" id="resetBtn">초기화</button>
+    </div>
+
+    <!-- 테이블 영역 -->
+    <div id="tableContainer">
+        <div class="loading">데이터를 불러오는 중...</div>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination" id="pagination"></div>
+</div>
+    <div id="admin-footer-container"></div>
+</div>
+
+<!-- 상세보기/처리 모달 -->
+<div id="detailModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>일반 신고 상세</h2>
+            <span class="close" id="modalCloseBtn">&times;</span>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- 동적으로 채워질 내용 -->
+        </div>
+    </div>
+</div>
+<script src="/js/api.js"></script>
+<script src="/js/admin-layout.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+<script src="/js/admin/report-management.js"></script>
+<script src="/js/admin/mission-management.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+<script src="/js/admin/popup-inquiry.js"></script>
+<script src="/js/admin/general-inquiry.js"></script>
+</body>
+</html>

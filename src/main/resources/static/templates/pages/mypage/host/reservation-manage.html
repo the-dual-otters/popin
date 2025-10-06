@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">예약 관리 - POPIN</title>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+
+    <!-- 페이지별 CSS -->
+    <link rel="stylesheet" href="/css/mypage/host/reservation-manage.css">
+    <div id="additional-css"></div>
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 -->
+    <div id="header-container"></div>
+
+    <!-- 메인 -->
+    <main class="main-content" id="main-content">
+        <section class="block">
+            <div class="page-header">
+                <div class="popup-header">
+                    <div class="popup-info">
+                        <h1 class="popup-title" id="popup-title">팝업명 로딩중...</h1>
+                        <div class="popup-subtitle">예약 관리</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 탭 컨테이너 -->
+        <section class="block">
+            <div class="tab-container">
+                <!-- 탭 메뉴 -->
+                <div class="tab-menu">
+                    <button class="tab-button active" onclick="ReservationManagePage.switchTab('reservations')">
+                        📋 예약자 관리
+                    </button>
+                    <button class="tab-button" onclick="ReservationManagePage.switchTab('settings')">
+                        ⚙️ 예약 설정
+                    </button>
+                </div>
+
+                <!-- 탭 1: 예약자 관리 -->
+                <div id="tab-reservations" class="tab-content active">
+                    <!-- 통계 섹션 -->
+                    <section class="block">
+                        <div class="stats-row">
+                            <div class="stat-card">
+                                <div class="stat-number" id="total-count">0</div>
+                                <div class="stat-label">전체 예약</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="reserved-count">0</div>
+                                <div class="stat-label">예약됨</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="visited-count">0</div>
+                                <div class="stat-label">방문완료</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="block">
+                        <h2 class="section-title">예약자 목록</h2>
+                        <div id="reservation-list" class="reservation-list">
+                            <div class="empty-state">
+                                <div class="icon">📅</div>
+                                <div class="text">예약자가 없습니다.</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- 탭 2: 예약 설정 -->
+                <div id="tab-settings" class="tab-content">
+                    <!-- 팝업 설정 섹션 -->
+                    <section class="block">
+                        <h2 class="section-title">팝업 설정</h2>
+                        <div class="settings-grid">
+                            <div class="setting-item">
+                                <div class="setting-label">타임 슬롯 간격</div>
+                                <select class="setting-input" id="time-slot-interval">
+                                    <option value="15">15분</option>
+                                    <option value="30" selected>30분</option>
+                                    <option value="45">45분</option>
+                                    <option value="60">60분</option>
+                                    <option value="90">90분</option>
+                                    <option value="120">120분</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">시간당 최대 인원</div>
+                                <input type="number" class="setting-input" id="max-capacity"
+                                       min="1" max="100" value="10" placeholder="최대 인원 수">
+                            </div>
+
+                            <div class="operating-hours">
+                                <div class="setting-label">운영 시간</div>
+                                <div class="hours-grid">
+                                    <span>시작</span>
+                                    <input type="time" class="setting-input" id="start-time" value="10:00">
+                                    <span>종료</span>
+                                    <input type="time" class="setting-input" id="end-time" value="20:00">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ReservationSettings로 연결 -->
+                        <button class="save-settings-btn" onclick="ReservationSettings.saveSettings()">설정 저장</button>
+                    </section>
+
+                    <!-- 시간대별 예약 현황 -->
+                    <div class="time-slots-section">
+                        <div class="time-slots-header">
+                            <h2 class="section-title" style="margin-bottom: 0;">시간대별 예약 현황</h2>
+                            <div class="date-selector">
+                                <!-- ReservationSettings로 연결 -->
+                                <input type="date" class="date-input" id="selected-date"
+                                       onchange="ReservationSettings.loadTimeSlots()">
+                            </div>
+                        </div>
+                        <div id="time-slots-container" class="time-slots-grid">
+                            <!-- 타임 슬롯들이 여기에 동적 로드 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <div id="footer-container"></div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<!-- 페이지별 스크립트 -->
+<script src="/js/mypage/host/reservation-manage.js"></script>
+<script src="/js/mypage/host/reservation-settings.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+        if (window.ReservationManagePage) {
+            ReservationManagePage.init();
+        }
+    });
+</script>
+</body>
+</html>

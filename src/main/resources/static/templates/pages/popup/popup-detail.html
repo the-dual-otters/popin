@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">POPIN - 팝업 상세</title>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eaef006c7d0c88e0935a7d8745e99144"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js" onload="Kakao.init('eaef006c7d0c88e0935a7d8745e99144')"></script>
+
+    <!-- Open Graph 메타 태그 (SNS 공유 최적화) -->
+    <meta property="og:title" content="POPIN - 팝업스토어">
+    <meta property="og:description" content="다양한 팝업스토어 정보를 확인하세요!">
+    <meta property="og:image" content="/images/logo.png">
+    <meta property="og:url" content="">
+    <meta property="og:type" content="website">
+
+    <!-- 트위터 카드 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="POPIN - 팝업스토어">
+    <meta name="twitter:description" content="다양한 팝업스토어 정보를 확인하세요!">
+    <meta name="twitter:image" content="/images/logo.png">
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/popup-detail.css">
+    <link rel="stylesheet" href="/css/popup-share-modal.css">
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content" id="main-content">
+        <!-- 팝업 상세 페이지 콘텐츠 -->
+        <div id="popup-detail-loading" class="loading-container">
+            <div class="loading"></div>
+        </div>
+
+        <div id="popup-detail-content" class="popup-detail-page" style="display: none;">
+            <!-- 메인 이미지 섹션 -->
+            <div class="popup-main-image">
+                <img id="popup-main-img" src="" alt="팝업 이미지" class="main-image">
+                <div class="image-overlay">
+                    <div class="action-buttons">
+                        <button class="action-btn" id="share-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                                <polyline points="16,6 12,2 8,6"></polyline>
+                                <line x1="12" y1="2" x2="12" y2="15"></line>
+                            </svg>
+                        </button>
+                        <button class="action-btn" id="bookmark-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 팝업 정보 섹션 -->
+            <div class="popup-info-section">
+                <h1 id="popup-title" class="popup-title"></h1>
+
+                <!-- 기간 정보 -->
+                <div class="popup-schedule-simple">
+                    <div id="popup-period" class="schedule-item period-text"></div>
+                    <div id="popup-days" class="schedule-item days-text" style="display: none;"></div>
+                </div>
+
+                <!-- 태그 섹션 -->
+                <div id="popup-tags" class="popup-tags"></div>
+
+                <!-- 예약하기 버튼 -->
+                <button id="reservation-btn" class="reservation-btn">
+                    예약하기
+                </button>
+            </div>
+
+            <!-- 운영시간 섹션 -->
+            <div class="operating-hours-section" id="operating-hours-section" style="display: none;">
+                <h2 class="section-title">운영 시간</h2>
+                <div id="popup-hours" class="schedule-item hours-text" style="display: none;"></div>
+            </div>
+
+            <!-- 지도 섹션 -->
+            <div class="location-section" id="location-section" style="display: none;">
+                <div class="location-header">
+                    <h2 class="location-title">위치</h2>
+                    <div id="venue-name" class="venue-name"></div>
+                </div>
+
+                <!-- 지도 -->
+                <div class="map-container">
+                    <div id="popup-location-map"></div>
+                </div>
+
+                <!-- 주소 복사 버튼 -->
+                <div class="address-row">
+                    <div id="venue-address" class="venue-address-inline"></div>
+                    <button id="copy-address-btn" class="copy-btn-inline">
+                        주소복사
+                    </button>
+                </div>
+            </div>
+
+            <!-- 팝업 상세설명 섹션 -->
+            <div class="description-section" id="description-section" style="display: none;">
+                <h2 class="section-title">팝업스토어 소개</h2>
+                <div class="description-content">
+                    <div id="popup-summary" class="popup-summary"></div>
+                    <div id="popup-description" class="popup-description"></div>
+                </div>
+            </div>
+
+            <!-- 리뷰 섹션 -->
+            <div class="reviews-section">
+                <div class="section-header">
+                    <h2>Reviews</h2>
+                    <button class="write-review-btn" id="writeReviewBtn">+ 리뷰 작성</button>
+                </div>
+
+                <!-- 리뷰 통계 -->
+                <div class="review-stats" id="reviewStats">
+                    <div class="stats-loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+
+                <!-- 리뷰 목록 (최신 2개) -->
+                <div class="reviews-list" id="reviewsList">
+                    <div class="reviews-loading" id="reviewsLoading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+
+                <!-- 더보기 버튼 -->
+                <button class="load-more-btn" id="loadMoreBtn" style="display: none;">+ 더보기</button>
+            </div>
+
+            <!-- 유사한 팝업 스토어 섹션 -->
+            <div class="similar-popups-section">
+                <h2 class="section-title">유사한 팝업 스토어</h2>
+                <div id="similar-popups-grid" class="similar-popups-grid">
+                    <!-- 동적으로 로드됩니다 -->
+                </div>
+            </div>
+        </div>
+
+        <div id="popup-detail-error" class="error-container" style="display: none;">
+            <p class="alert alert-error">팝업 정보를 불러오는 중 오류가 발생했습니다.</p>
+            <button class="btn btn-primary" onclick="window.history.back()">돌아가기</button>
+        </div>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+<script src="/js/popup-detail.js"></script>
+
+<!-- 애플리케이션 초기화 -->
+<script>
+    // 페이지 로드 시 헤더/푸터 로드 및 팝업 상세 초기화
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+
+        // URL에서 팝업 ID 가져오기 (새로운 경로 구조)
+        const pathParts = window.location.pathname.split('/');
+        const popupId = pathParts[2]; // /popup/{id} 에서 {id} 부분
+
+        if (popupId && /^\d+$/.test(popupId)) {
+            const manager = new PopupDetailManager(popupId);
+            await manager.initialize();
+        } else {
+            // 팝업 ID가 없거나 잘못된 경우
+            document.getElementById('popup-detail-error').style.display = 'flex';
+            const errorText = document.querySelector('#popup-detail-error .alert');
+            if (errorText) {
+                errorText.textContent = '잘못된 팝업 ID입니다.';
+            }
+        }
+    });
+</script>
+</body>
+</html>

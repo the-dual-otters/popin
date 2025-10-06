@@ -1,0 +1,293 @@
+/* ===== chat.css - 모바일 레이아웃 맞춤 수정 ===== */
+
+/* ===== 공통 ===== */
+.main-content {
+    background: #f9fafb;
+    padding: 0 20px;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding-bottom: 160px !important; /* 입력창 + 푸터 공간 확보 */
+}
+
+.block {
+    margin-bottom: 24px;
+}
+
+/* ===== 채팅 컨테이너 ===== */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #f9fafb;
+}
+
+/* ===== 채팅 헤더 (블루 헤더 스타일) ===== */
+.chat-header {
+    background: #2563eb !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    margin-bottom: 24px !important;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3) !important;
+    color: white !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chat-header h3 {
+    flex: 1;
+    text-align: center;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    margin: 0;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+/* ===== 채팅 메시지 영역 - 스크롤 가능 ===== */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #f9fafb;
+    min-height: 300px; /* 최소 높이 설정 */
+    max-height: calc(100vh - 300px); /* 헤더 + 입력창 + 푸터 공간 제외 */
+    padding-bottom: 20px;
+}
+
+.chat-message {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: white;
+    align-self: flex-start;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.chat-message:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.chat-message.me {
+    background: #2563eb;
+    color: white;
+    align-self: flex-end;
+    border: 1px solid #2563eb;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.chat-message.me:hover {
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.chat-message .sender {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    opacity: 0.8;
+    color: #6b7280;
+}
+
+.chat-message.me .sender {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.chat-message .content {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #111827;
+    margin-bottom: 6px;
+}
+
+.chat-message.me .content {
+    color: white;
+}
+
+.chat-message .time {
+    font-size: 11px;
+    text-align: right;
+    opacity: 0.6;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.chat-message.me .time {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ===== 채팅 입력 영역 - 모바일 컨테이너 내부에서 고정 ===== */
+.chat-input {
+    position: fixed;
+    bottom: 80px; /* 푸터 높이만큼 위 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px); /* 좌우 패딩 20px씩 */
+    max-width: 600px; /* 모바일 컨테이너 최대 너비와 맞춤 */
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    gap: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    font-size: 14px;
+    outline: none;
+    background: #f9fafb;
+    transition: all 0.2s;
+}
+
+.chat-input input:focus {
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.chat-input input::placeholder {
+    color: #9ca3af;
+}
+
+.chat-input button {
+    padding: 12px 20px;
+    background: #2563eb;
+    border: none;
+    border-radius: 24px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    white-space: nowrap;
+}
+
+.chat-input button:hover {
+    background: #1e40af;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.chat-input button:active {
+    transform: translateY(0);
+}
+
+/* ===== 푸터 겹침 방지 ===== */
+.mobile-container {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+}
+
+#footer-container {
+    position: relative !important;
+    flex-shrink: 0 !important;
+}
+
+/* ===== 모바일 대응 ===== */
+@media (max-width: 480px) {
+    .main-content {
+        padding: 0 12px;
+        padding-bottom: 160px !important;
+    }
+
+    .chat-header {
+        padding: 16px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .chat-header h3 {
+        font-size: 16px !important;
+    }
+
+    .chat-messages {
+        gap: 10px;
+        max-height: calc(100vh - 280px);
+    }
+
+    .chat-message {
+        max-width: 85%;
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .chat-input {
+        width: calc(100% - 24px);
+        padding: 12px 16px;
+        gap: 10px;
+    }
+
+    .chat-input input {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .chat-input button {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .btn-back {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+}
+
+/* ===== 스크롤바 스타일링 ===== */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}

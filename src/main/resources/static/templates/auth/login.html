@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>로그인 - POPIN</title>
+    <link rel="stylesheet" href="/css/layout.css"/>
+    <link rel="stylesheet" href="/css/login.css">
+    <style>
+        /* header, footer 자리 맞추기 */
+        body {
+            padding-bottom: 64px;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 -->
+    <div id="header-container"></div>
+    <div class="login-container">
+        <div id="app-header-mount"></div>
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">POPIN</div>
+                <h1 class="login-title">로그인</h1>
+                <p class="login-subtitle">계정에 로그인하여 서비스를 이용해보세요</p>
+            </div>
+
+            <div id="alert-container" class="alert"></div>
+
+            <form id="loginForm" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="email">이메일</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="이메일을 입력하세요" required
+                           autocomplete="email"/>
+                    <div class="field-error" id="email-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="비밀번호를 입력하세요"
+                           required autocomplete="current-password"/>
+                    <div class="field-error" id="password-error"></div>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="loading"></span>
+                    <span class="btn-text">로그인</span>
+                </button>
+            </form>
+
+            <div class="signup-link">계정이 없으신가요? <a href="/auth/signup">회원가입하기</a></div>
+        </div>
+    </div>
+    <div id="footer-container"></div>
+
+</div>
+
+<!-- JavaScript 파일들 로드 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/auth/loginApi.js"></script>
+<script src="/js/auth/loginValidator.js"></script>
+<script src="/js/auth/loginUI.js"></script>
+<script src="/js/auth/loginController.js"></script>
+<script src="/js/pages.js"></script>
+
+
+<script>
+    // 페이지 로드 완료 후 로그인 컨트롤러 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+        new LoginController();
+    });
+</script>
+</body>
+</html>

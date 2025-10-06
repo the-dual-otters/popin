@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팝업 통계</title>
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/mypage/host/popup-stats.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="mobile-container">
+    <div id="header-container"></div>
+    <main class="main-content" id="main-content">
+        <h3 class="block-title">팝업 통계</h3>
+
+        <div class="block chart-card">
+            <h4>📈 방문자 변동</h4>
+            <div class="loading" id="visitorTrend-loading">데이터를 불러오는 중...</div>
+            <canvas id="visitorTrend" style="display:none;"></canvas>
+        </div>
+
+        <div class="block chart-card">
+            <h4>⏰ 시간대별 분석</h4>
+            <div class="loading" id="hourlyStats-loading">데이터를 불러오는 중...</div>
+            <canvas id="hourlyStats" style="display:none;"></canvas>
+        </div>
+
+        <div class="block chart-card">
+            <h4>📊 예약 현황</h4>
+            <div class="loading" id="reservationStats-loading">데이터를 불러오는 중...</div>
+            <canvas id="reservationStats" style="display:none;"></canvas>
+        </div>
+
+        <div class="block chart-card">
+            <h4>🎯 미션 수행자 수</h4>
+            <div class="loading" id="missionStats-loading">데이터를 불러오는 중...</div>
+            <canvas id="missionStats" style="display:none;"></canvas>
+        </div>
+    </main>
+    <div id="footer-container"></div>
+</div>
+
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<script src="/js/mypage/host/popup-stats.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+    });
+</script>
+</body>
+</html>

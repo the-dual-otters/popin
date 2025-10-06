@@ -1,0 +1,47 @@
+<header class="header" id="app-header">
+    <div class="header-left">
+        <!-- 왼쪽 여백 또는 추가 아이콘 -->
+        <div class="icon-btn" onclick="window.history.back()">
+            <!-- 알림 아이콘 -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+
+        </div>
+
+    </div>
+    <div class="logo" onclick="location.href='/'">
+        <!-- 로고 이미지 -->
+        <img src="/images/logo.png"
+             alt="POPIN"
+             class="logo-img"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <!-- 기본 로고 (이미지 로드 실패 시) -->
+        <div class="logo-bubble" style="display: none;">
+            <span class="logo-text">POPIN</span>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="icon-btn" id="notificationIcon"  onclick="showNotifications()">
+            <!-- 알림 아이콘 -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="m13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+        </div>
+        <div id="notificationDropdown" class="notification-dropdown hidden">
+            <div class="notification-header">알림</div>
+            <ul id="notificationList"></ul>
+        </div>
+
+        <div class="icon-btn" onclick="goToProfile()">
+            <!-- 프로필 아이콘 -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+        <div class="icon-btn" id="authIcon"></div>
+    </div>
+</header>

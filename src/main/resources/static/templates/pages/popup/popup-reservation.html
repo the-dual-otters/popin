@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">POPIN - 팝업 예약하기</title>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/popup-reservation.css">
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content" id="main-content">
+        <!-- 로딩 상태 -->
+        <div id="reservation-loading" class="loading-container">
+            <div class="loading"></div>
+        </div>
+
+        <!-- 에러 상태 -->
+        <div id="reservation-error" class="error-container" style="display: none;">
+            <p class="alert alert-error">예약 정보를 불러오는 중 오류가 발생했습니다.</p>
+            <button class="btn btn-primary" onclick="window.history.back()">돌아가기</button>
+        </div>
+
+        <!-- 예약하기 페이지 콘텐츠 -->
+        <div id="reservation-content" class="reservation-page" style="display: none;">
+            <!-- 팝업 정보 헤더 -->
+            <div class="popup-header-section">
+                <div class="popup-header-image">
+                    <img id="popup-image" src="" alt="팝업 이미지" class="header-image">
+                </div>
+                <div class="popup-header-info">
+                    <h1 id="popup-name" class="popup-name"></h1>
+                    <p id="popup-location" class="popup-location"></p>
+                </div>
+            </div>
+
+            <!-- 예약자 정보 섹션 -->
+            <div class="form-section">
+                <h2 class="section-title">예약자 정보</h2>
+
+                <div class="form-group">
+                    <label for="name" class="form-label">예약자명</label>
+                    <input type="text" id="name" name="name" class="form-input" required
+                           placeholder="예약자 이름을 입력해주세요">
+                    <span class="error-message" id="name-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" class="form-label">전화번호</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" required
+                           placeholder="010-0000-0000">
+                    <span class="error-message" id="phone-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="party-size" class="form-label">예약 인원</label>
+                    <div class="select-wrapper">
+                        <select id="party-size" name="partySize" class="form-select" required>
+                            <option value="">인원 선택</option>
+                            <option value="1">1명</option>
+                            <option value="2">2명</option>
+                            <option value="3">3명</option>
+                            <option value="4">4명</option>
+                            <option value="5">5명</option>
+                            <option value="6">6명</option>
+                            <option value="7">7명</option>
+                            <option value="8">8명</option>
+                            <option value="9">9명</option>
+                            <option value="10">10명</option>
+                        </select>
+                    </div>
+                    <span class="error-message" id="party-size-error"></span>
+                </div>
+            </div>
+
+            <!-- 예약 일정 섹션 -->
+            <div class="form-section">
+                <h2 class="section-title">예약 일정</h2>
+
+                <div class="form-group">
+                    <label for="reservation-date" class="form-label">예약일</label>
+                    <input type="date" id="reservation-date" name="reservationDate" class="form-input" required>
+                    <span class="error-message" id="date-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">예약 시간</label>
+                    <div id="time-slots-container" class="time-slots-container">
+                        <p class="time-slots-placeholder">날짜를 먼저 선택해주세요.</p>
+                    </div>
+                    <span class="error-message" id="time-error"></span>
+                </div>
+            </div>
+
+            <!-- 예약하기 버튼 -->
+            <div class="button-section">
+                <button type="button" class="reservation-btn" id="submit-btn" disabled>
+                    예약하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 예약 완료 모달 -->
+    <div id="success-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-content">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20,6 9,17 4,12"></polyline>
+                    </svg>
+                </div>
+                <h3 class="modal-title">예약이 완료되었습니다!</h3>
+                <p class="modal-text">예약 정보를 확인하려면 마이페이지를 방문해주세요.</p>
+
+                <div class="modal-buttons">
+                    <button class="btn-secondary" onclick="goToPopupDetail()">팝업으로 돌아가기</button>
+                    <button class="btn-primary" onclick="goToMyPage()">내 예약 보기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<script src="/js/payment.js"></script>
+<script src="/js/popup-reservation.js"></script>
+
+<!-- 애플리케이션 초기화 -->
+<script>
+    // 페이지 로드 시 헤더/푸터 로드 및 예약 페이지 초기화
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+
+        // URL에서 팝업 ID 가져오기 (/popup/{id}/reservation)
+        const pathParts = window.location.pathname.split('/');
+        const popupId = pathParts[2]; // /popup/{id}/reservation 에서 {id} 부분
+
+        if (popupId && /^\d+$/.test(popupId)) {
+            const manager = new PopupReservationManager(popupId);
+            await manager.initialize();
+        } else {
+            // 팝업 ID가 없거나 잘못된 경우
+            document.getElementById('reservation-error').style.display = 'flex';
+            const errorText = document.querySelector('#reservation-error .alert');
+            if (errorText) {
+                errorText.textContent = '잘못된 팝업 ID입니다.';
+            }
+        }
+    });
+</script>
+</body>
+</html>

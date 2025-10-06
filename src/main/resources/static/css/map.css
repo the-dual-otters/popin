@@ -1,0 +1,189 @@
+/* 지도 페이지 컴팩트 스타일 */
+
+.map-container {
+    position: relative;
+    height: 50vh;
+    min-height: 300px;
+    width: auto;
+    margin: 0 16px;
+    padding: 16px;
+}
+.kakao-map {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+.popup-marker-label {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    white-space: nowrap;
+}
+
+.selected-popup-section {
+    padding: 16px 20px 0;
+    margin: 0 16px;
+    display: none;
+}
+.selected-popup-section .popup-card-horizontal.selected {
+    position: relative;
+    border: 2px solid #4B5AE4;
+    background: #f0f2fe;
+    box-shadow: 0 4px 20px rgba(75, 90, 228, 0.2);
+    cursor: pointer;
+}
+.selected-popup-section .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 10;
+}
+.selected-popup-section .close-btn:hover { background: rgba(0, 0, 0, 0.2); }
+.nearby-section {
+    padding: 24px 20px 120px;
+    margin: 0 16px;
+}
+.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 12px;
+}
+.category-filters {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 0 0 20px 0;
+    margin-bottom: 24px;
+    white-space: nowrap;
+    cursor: grab;
+    user-select: none;
+}
+.category-filters.active-drag { cursor: grabbing; }
+.category-filters::-webkit-scrollbar { display: none; }
+.category-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid #e5e7eb;
+    background-color: white;
+    color: #6b7280;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    pointer-events: auto;
+}
+.category-btn:hover { border-color: #4B5AE4; color: #4B5AE4; }
+.category-btn.active {
+    background-color: #4B5AE4;
+    color: white;
+    border-color: #4B5AE4;
+}
+.popup-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.popup-card-horizontal {
+    display: flex;
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.popup-card-horizontal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.popup-image-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-right: 16px;
+}
+.popup-image { width: 100%; height: 100%; object-fit: cover; }
+.popup-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.popup-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+.popup-period, .popup-location {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+/* ✨ [NEW] 로딩 인디케이터 스타일 */
+.loading-indicator {
+    display: block;
+    margin: 40px auto;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #4B5AE4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 375px) {
+    .map-container, .selected-popup-section, .nearby-section { margin: 0 8px; }
+    .map-container { height: 45vh; min-height: 280px; padding: 12px; }
+    .selected-popup-section { padding: 12px 16px 0; }
+    .nearby-section { padding: 20px 16px 120px; }
+    .section-title { font-size: 20px; }
+    .category-btn { padding: 8px 16px; font-size: 13px; }
+    .popup-card-horizontal { padding: 12px; }
+    .popup-image-wrapper { width: 70px; height: 70px; margin-right: 12px; }
+    .popup-title { font-size: 15px; }
+}
+@media (min-width: 600px) {
+    .map-container, .selected-popup-section, .nearby-section {
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

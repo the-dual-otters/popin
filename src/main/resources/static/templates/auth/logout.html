@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그아웃 - POPIN</title>
+    <link rel="stylesheet" href="/css/layout.css" />
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1 class="login-title">로그아웃 처리 중...</h1>
+        </div>
+        <div style="text-align: center; padding: 20px;">
+            <div class="loading" style="margin: 20px auto;"></div>
+            <p>잠시만 기다려주세요.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    console.log('로그아웃 페이지 로드됨');
+
+    // 1. 클라이언트 저장소 모두 삭제
+    try {
+        localStorage.clear();
+        sessionStorage.clear();
+        console.log('localStorage/sessionStorage 삭제 완료');
+    } catch (e) {
+        console.error('저장소 삭제 오류:', e);
+    }
+
+    // 2. 쿠키 삭제 (추가 보장)
+    try {
+        document.cookie = "jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+        document.cookie = "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+        document.cookie = "remember-me=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+        console.log('쿠키 삭제 완료');
+    } catch (e) {
+        console.error('쿠키 삭제 오류:', e);
+    }
+
+    // 3. 로그아웃 완료 확인
+    setTimeout(() => {
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+            console.error('토큰이 아직 남아있음!');
+        } else {
+            console.log('✅ 로그아웃 완료!');
+        }
+
+        // 4. 로그인 페이지로 이동
+        window.location.href = '/auth/login?logout=true';
+    }, 1500);
+</script>
+</body>
+</html>

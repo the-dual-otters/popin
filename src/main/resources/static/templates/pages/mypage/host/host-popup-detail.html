@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">팝업 상세보기 - POPIN</title>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    <!-- 페이지별 CSS -->
+    <link rel="stylesheet" href="/css/mypage/host/host-popup-detail.css">
+    <div id="additional-css"></div>
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container"></div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content" id="main-content">
+        <section class="block">
+            <div class="page-header">
+                <h3 class="block-title">등록 팝업 상세보기</h3>
+            </div>
+
+            <div class="popup-detail-card">
+                <img id="popup-image" class="popup-image" alt="팝업 이미지">
+                <div class="popup-info">
+                    <p><b>팝업명:</b> <span id="popup-title">-</span></p>
+                    <p><b>요약:</b> <span id="popup-summary">-</span></p>
+                    <p><b>상세설명:</b> <span id="popup-description">-</span></p>
+                    <p><b>일정:</b> <span id="popup-schedule">-</span></p>
+                    <p><b>장소명:</b> <span id="popup-venue">-</span></p>
+                    <p><b>주소:</b> <span id="popup-address">-</span></p>
+                    <p><b>상태:</b> <span id="popup-status">-</span></p>
+                    <p><b>카테고리:</b> <span id="popup-category">-</span></p>
+                </div>
+
+                <!-- 장소 등록 버튼 -->
+                <button class="btn-venue" id="btn-register-venue">장소 등록/변경</button>
+
+                <!-- 버튼 영역 (하단 배치) -->
+                <div class="popup-actions">
+                    <button class="btn-edit">수정</button>
+                    <button class="btn-delete">삭제</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 장소 등록 모달 -->
+    <div id="venue-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>장소 등록</h3>
+            <form id="venue-form">
+                <div class="form-group">
+                    <label>장소명 <span class="required">*</span></label>
+                    <input type="text" id="venue-name" required>
+                </div>
+                <div class="form-group">
+                    <label>도로명 주소 <span class="required">*</span></label>
+                    <input type="text" id="venue-road-address" readonly required>
+                </div>
+                <div class="form-group">
+                    <label>지번 주소</label>
+                    <input type="text" id="venue-jibun-address" readonly>
+                </div>
+                <div class="form-group">
+                    <label>상세 주소</label>
+                    <input type="text" id="venue-detail-address">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="venue-parking"> 주차 가능
+                    </label>
+                </div>
+                <input type="hidden" id="venue-latitude">
+                <input type="hidden" id="venue-longitude">
+
+                <button type="button" class="btn-secondary" id="btn-search-address">주소 검색</button>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">등록</button>
+                    <button type="button" class="btn-secondary btn-cancel">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container"></div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<!-- 카카오 주소 검색 API -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<!-- 페이지별 스크립트 -->
+<script src="/js/mypage/host/host-popup-detail.js"></script>
+
+<!-- 애플리케이션 초기화 -->
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+        if (window.HostPopupDetailPage) {
+            HostPopupDetailPage.init();
+        }
+    });
+</script>
+</body>
+</html>

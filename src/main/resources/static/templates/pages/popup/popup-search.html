@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">POPIN - 팝업 검색</title>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/popup-search.css">
+    <link rel="stylesheet" href="/css/popup-list.css">
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content" id="main-content">
+        <div class="popup-search-container">
+            <div class="search-area">
+                <div class="search-input-wrapper">
+                    <input type="text" id="popup-search-input" class="search-input" placeholder="검색어를 입력하세요" autocomplete="off">
+                    <button class="search-button" id="popup-search-button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="related-searches" id="popup-related-searches"></div>
+            </div>
+            <div id="popup-search-results" class="search-results"></div>
+            <div id="popup-search-loading" class="loading-container" style="display: none;">
+                <div class="loading"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+<script src="/js/popup-search.js"></script>
+
+<!-- 애플리케이션 초기화 -->
+<script>
+    // 페이지 로드 시 헤더/푸터 로드 및 검색 페이지 초기화
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+
+        // URL 파라미터에서 검색 조건 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('query') || urlParams.get('q');
+        const region = urlParams.get('region');
+        const category = urlParams.get('category');
+
+        // 검색 페이지 초기화
+        const manager = new PopupSearchManager();
+        await manager.initialize();
+
+        // 초기 검색 조건이 있으면 자동 검색 실행
+        if (query || region || category) {
+            manager.performSearch({
+                query: query,
+                region: region,
+                category: category
+            });
+        }
+    });
+</script>
+</body>
+</html>

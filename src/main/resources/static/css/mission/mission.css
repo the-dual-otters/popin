@@ -1,0 +1,230 @@
+/* =========================
+   미션 보드
+========================= */
+.mission-board {
+    padding: 20px;
+    margin: 8px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,.08);
+    text-align: center;
+}
+
+/* 헤더 */
+.mission-head .title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #333;
+}
+.mission-head .subtitle {
+    font-size: 15px;
+    color: #555;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+/* =========================
+   미션 그리드 (2열 고정)
+========================= */
+.mission-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+    justify-items: center;
+}
+
+/* 미션 아이템 */
+.mission-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 120px;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.mission-item:hover {
+    transform: translateY(-3px);
+}
+
+/* 스탬프 원형 */
+.mission-stamp {
+    width: 96px;
+    height: 96px;
+    border: 3px solid #f5a3c7;
+    border-radius: 50%;
+    background: #ffeaf4;
+    display: grid;
+    place-items: center;
+    position: relative;
+    z-index: 1; /* 클릭 보장 */
+    box-shadow: 0 3px 8px rgba(0,0,0,.1);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+.mission-stamp:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0,0,0,.15);
+}
+
+/* 스탬프 이름 */
+.mission-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: #444;
+    text-align: center;
+    word-break: keep-all;
+}
+
+/* 완료 표시 (도장 이미지) */
+.mission-stamp.done::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("/images/clear.png") no-repeat center/100%;
+    opacity: 0.9;
+    transform: rotate(-8deg);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* =========================
+   완료 버튼
+========================= */
+.mission-complete-btn {
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px 16px;
+    border: 0;
+    border-radius: 16px;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,.1);
+    transition: background .2s ease, transform .15s ease;
+}
+.mission-complete-btn:hover:not(.disabled) {
+    transform: translateY(-2px);
+}
+.mission-complete-btn.enabled {
+    background: #4B5AE4;
+}
+.mission-complete-btn.disabled {
+    background: #B6BCF7;
+    cursor: not-allowed;
+}
+
+/* =========================
+   모달
+========================= */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-card {
+    position: relative;
+    width: min(92vw, 420px);
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px 24px 20px;
+    box-shadow: 0 12px 36px rgba(0,0,0,.25);
+    animation: popIn .25s ease;
+}
+
+/* 닫기 버튼 (X) */
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    color: #888;
+    transition: color .2s ease;
+}
+.modal-close:hover {
+    color: #333;
+}
+
+/* 모달 내용 */
+.modal-title {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+.modal-desc {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+.modal-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.modal-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+/* 모달 버튼 */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+.submit-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.submit-btn:hover {
+    background-color: #4B5AE4;
+    color: white;
+    box-shadow: 0 2px 8px rgba(75, 90, 228, 0.3);
+}
+
+/* 룰렛 컨테이너 */
+.roulette-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: 12px solid #fff;       /* 굵은 겉 테두리 */
+    box-shadow: 0 8px 24px rgba(0,0,0,.15);
+    position: relative;
+}
+
+.roulette-container canvas {
+    display: block;
+    border-radius: 50%;
+}
+
+
+
+/* 애니메이션 */
+@keyframes popIn {
+    from { opacity: 0; transform: scale(.9); }
+    to { opacity: 1; transform: scale(1); }
+}

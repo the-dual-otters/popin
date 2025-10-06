@@ -1,0 +1,460 @@
+/* ===== 공통 ===== */
+.main-content {
+    background: #f9fafb;
+    padding: 0 20px;
+    flex: 1 !important;
+    padding: 0 20px 120px 20px !important;
+    box-sizing: border-box !important;
+}
+
+.mobile-container {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+}
+
+#footer-container {
+    position: relative !important;
+    flex-shrink: 0 !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ===== 로딩 및 에러 상태 ===== */
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+    font-size: 16px;
+    background: white;
+    border-radius: 12px;
+    margin: 20px 0;
+    border: 1px solid #e5e7eb;
+}
+
+.error-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #991b1b;
+    font-size: 16px;
+    background: #fee2e2;
+    border-radius: 12px;
+    margin: 20px 0;
+    border: 1px solid #fecaca;
+}
+
+/* ===== 페이지 제목 (호스트 페이지와 통일) ===== */
+.page-title {
+    background: #4B5AE4 !important;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3) !important;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0 0 24px 0;
+    text-align: center;
+}
+
+/* ===== 상세 컨텐츠 ===== */
+.detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ===== 히어로 이미지 ===== */
+.hero {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.hero-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f9fafb !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
+}
+
+.hero-img[src=""] {
+    background: #f9fafb !important;
+}
+
+/* ===== 소유자 정보 ===== */
+.owner-info {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.owner-info span {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ===== 상세 정보 그리드 ===== */
+.detail-grid {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.detail-grid > div {
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #f3f4f6;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.detail-grid strong,
+.detail-grid span {
+    color: #111827;
+    font-weight: 500;
+}
+
+/* ===== 설명 섹션 ===== */
+.desc-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.desc-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.desc-section p {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    color: #374151;
+    font-size: 14px;
+}
+
+/* ===== 액션 버튼들 (호스트 페이지와 통일) ===== */
+.owner-actions,
+.common-actions {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn.list {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+.btn.list:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+.btn.reserve {
+    background: #1e40af !important;
+    color: white;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3) !important;
+}
+
+.btn.reserve:hover {
+    background: #1e3a8a !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.4) !important;
+}
+
+.btn.edit {
+    background: #1e40af !important;
+    color: white;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3) !important;
+}
+
+.btn.edit:hover {
+    background: #1e3a8a !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.4) !important;
+}
+
+.btn.delete {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.btn.delete:hover {
+    background: #fecaca;
+    transform: translateY(-1px);
+}
+
+/* ===== 모달 스타일 ===== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 32px 24px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    animation: modalSlideUp 0.3s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content h3 {
+    margin: 0 0 24px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+    text-align: center;
+}
+
+/* ===== 폼 스타일 (호스트 페이지와 통일) ===== */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #374151;
+    font-size: 14px;
+}
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    background: #fafafa;
+    box-sizing: border-box;
+}
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #2563eb !important;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+.date-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.date-group {
+    margin-bottom: 20px;
+}
+
+.date-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #374151;
+    font-size: 14px;
+}
+
+.date-input {
+    position: relative;
+}
+
+.date-input input[type="date"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 16px;
+    background: #fafafa;
+    transition: all 0.2s ease;
+    color: #374151;
+    box-sizing: border-box;
+}
+
+.date-input input[type="date"]:focus {
+    outline: none;
+    border-color: #2563eb !important;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+.required {
+    color: #ef4444;
+}
+
+.form-hint {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* ===== 모달 액션 버튼 (호스트 페이지와 통일) ===== */
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.modal-actions .btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.modal-actions .btn.reserve {
+    background: #1e40af !important;
+    color: white;
+}
+
+.modal-actions .btn.reserve:hover {
+    background: #1e3a8a !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3) !important;
+}
+
+.modal-actions .btn.cancel {
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+}
+
+.modal-actions .btn.cancel:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* ===== 모바일 대응 ===== */
+@media (max-width: 480px) {
+    .main-content {
+        padding: 0 12px 120px 12px !important;
+    }
+
+    .page-title {
+        font-size: 18px;
+        padding: 16px;
+    }
+
+    .hero,
+    .owner-info,
+    .detail-grid,
+    .desc-section,
+    .owner-actions,
+    .common-actions {
+        padding: 16px;
+    }
+
+    .hero-img {
+        height: 200px;
+    }
+
+    .detail-grid {
+        gap: 12px;
+    }
+
+    .detail-grid > div {
+        padding: 10px;
+    }
+
+    .owner-actions,
+    .common-actions {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        padding: 24px 20px;
+        width: 95%;
+    }
+
+    .date-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+}

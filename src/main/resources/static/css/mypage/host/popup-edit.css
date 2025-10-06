@@ -1,0 +1,372 @@
+/* ===== 공통 ===== */
+.main-content {
+    background: #f9fafb;
+    padding: 0 20px;
+    flex: 1 !important;
+    padding: 0 20px 120px 20px !important;
+    box-sizing: border-box !important;
+}
+
+.mobile-container {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+}
+
+#footer-container {
+    position: relative !important;
+    flex-shrink: 0 !important;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ===== 섹션 제목 (호스트 페이지와 통일) ===== */
+.section-title {
+    background: #4B5AE4 !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    margin-bottom: 24px !important;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3) !important;
+    color: white !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    margin: 0 0 24px 0 !important;
+    text-align: center;
+}
+
+/* ===== 폼 그룹 ===== */
+.form-group {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #111827;
+    font-size: 14px;
+}
+
+/* ===== 입력 필드 스타일 ===== */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+/* ===== 포커스 상태 (호스트 페이지와 통일) ===== */
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+/* ===== 텍스트 영역 ===== */
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ===== 체크박스 스타일 (호스트 페이지와 통일) ===== */
+.form-group label input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+    accent-color: #2563eb;
+    vertical-align: middle;
+}
+
+/* ===== 파일 업로드 (호스트 페이지와 통일) ===== */
+.form-group input[type="file"] {
+    padding: 8px;
+    border: 2px dashed #e5e7eb;
+    background: #f9fafb;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.form-group input[type="file"]:hover {
+    border-color: #2563eb !important;
+    background: #dbeafe !important;
+}
+
+/* ===== 이미지 미리보기 ===== */
+.image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.image-preview img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.image-preview img:hover {
+    transform: scale(1.05);
+}
+
+/* ===== 운영 시간 컨테이너 ===== */
+#hours-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.hour-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ===== 요일 버튼 ===== */
+.day-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.day-btn {
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.day-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.day-btn.active {
+    background: #2563eb !important;
+    color: white !important;
+    border-color: #2563eb !important;
+}
+
+/* ===== 시간 입력 ===== */
+.time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.time-inputs input[type="time"] {
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+}
+
+.time-inputs span {
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* ===== 삭제 버튼 ===== */
+.remove-btn {
+    align-self: flex-end;
+    padding: 6px 12px;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.remove-btn:hover {
+    background: #fecaca;
+    transform: translateY(-1px);
+}
+
+/* ===== 운영시간 추가 버튼 ===== */
+#add-hour-btn {
+    padding: 10px 16px;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+}
+
+#add-hour-btn:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+/* ===== 폼 액션 버튼 영역 ===== */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    min-height: 44px;
+}
+
+/* ===== 주요 버튼 (호스트 페이지와 통일) ===== */
+.btn-primary {
+    background: #1e40af !important;
+    color: white;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3) !important;
+}
+
+.btn-primary:hover {
+    background: #1e3a8a !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.4) !important;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+.btn-secondary.small {
+    flex: none;
+    width: auto;
+    min-width: auto;
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+/* ===== 에러 스타일 ===== */
+.error {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #fecaca;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* ===== 모바일 대응 ===== */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 0 12px 120px 12px !important;
+    }
+
+    .form-group {
+        padding: 16px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        flex: none;
+        width: 100%;
+    }
+
+    .day-buttons {
+        justify-content: center;
+    }
+
+    .time-inputs {
+        justify-content: center;
+    }
+
+    .hour-item {
+        padding: 12px;
+    }
+}
+
+/* ===== 태그 컨테이너 ===== */
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.tag-btn {
+    padding: 8px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    background: #f9fafb;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #374151;
+}
+
+.tag-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.tag-btn.selected {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}

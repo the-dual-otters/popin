@@ -1,0 +1,497 @@
+/* === 페이지 컨테이너 === */
+.mypage-host {
+    padding: 0;
+    background: #f9fafb;
+}
+
+/* === 제목 스타일 === */
+.section-title {
+    background: #4B5AE4 !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    margin: 20px 16px 24px 16px !important;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3) !important;
+}
+
+.section-title h2 {
+    color: white !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    margin: 0 !important;
+}
+
+/* === 공통 블록 스타일 === */
+.block {
+    margin: 24px 0;
+    padding: 0 16px;
+}
+
+.block-title {
+    background: #4B5AE4 !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    margin-bottom: 24px !important;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3) !important;
+    color: white !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* === 사용자 정보 === */
+.user-info .card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+}
+
+.user-profile {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+}
+
+/* === 호스트용 프로필 행 (기존) === */
+.profile-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.profile-row:last-child {
+    border-bottom: none;
+}
+
+.profile-row .label {
+    font-weight: 600;
+    color: #333;
+    min-width: 80px;
+    font-size: 0.9rem;
+}
+
+.profile-row .value {
+    flex: 1;
+    margin: 0 12px;
+    color: #6a6a6a;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.profile-row.readonly .value {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* === 마이페이지 정보 === */
+.mypage-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #333;
+}
+
+.info-value-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.info-value {
+    color: #6a6a6a;
+    flex: 1;
+}
+
+.edit-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.edit-btn:hover {
+    background-color: #4B5AE4;
+    color: white;
+    box-shadow: 0 2px 8px rgba(75, 90, 228, 0.3);
+}
+
+/* === 인라인 편집 === */
+.inline-edit {
+    flex: 1;
+    margin: 0 12px;
+    padding: 8px 12px;
+    border: 2px solid #3b82f6;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #ffffff;
+    color: #374151;
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+}
+
+/* 저장 / 취소 버튼 */
+.save-btn, .cancel-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.save-btn:hover, .cancel-btn:hover, .edit-btn:hover {
+    box-shadow: 0 3px 3px rgb(90, 90, 90);
+}
+
+.save-btn {
+    background: #4b5ae4;
+    color: white;
+}
+
+.cancel-btn {
+    background: #f44336;
+    color: white;
+}
+
+/* === 팝업 카드 === */
+.popup-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: all 0.2s ease;
+}
+
+.popup-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+.popup-card .thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f3f4f6;
+    flex-shrink: 0;
+}
+
+.popup-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.popup-card .info {
+    flex: 1;
+    min-width: 0;
+}
+
+.popup-card .title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    min-height: 1.3em;
+}
+
+.popup-card .meta {
+    font-size: 0.85rem;
+    color: #6a6a6a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.popup-card .right-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-self: flex-start;
+}
+
+.btn-detail, .btn-manage, .btn-stats {
+    background: #f3f4f6;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-detail:hover, .btn-manage:hover, .btn-stats:hover {
+    background: #4B5AE4;
+    color: white;
+    border-color: #4B5AE4;
+}
+
+/* === 예약 카드 === */
+.rent-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.rent-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.rent-card .left {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.rent-card .thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f3f4f6;
+    flex-shrink: 0;
+}
+
+.rent-card .address {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    min-height: 1.3em;
+}
+
+.rent-card .desc {
+    font-size: 0.85rem;
+    color: #6a6a6a;
+    margin-bottom: 4px;
+}
+
+.rent-card .dates {
+    font-size: 0.85rem;
+    color: #6a6a6a;
+    margin-bottom: 8px;
+}
+
+.rent-card .right-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.action-left {
+    display: flex;
+    gap: 8px;
+}
+
+.action-right {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+/* 공통 버튼 */
+.btn-map, .btn-detail, .btn-cancel, .btn-chat {
+    background: #f3f4f6;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-map:hover, .btn-detail:hover, .btn-cancel:hover {
+    background: #4B5AE4;
+    color: white;
+    border-color: #4B5AE4;
+}
+
+/* 채팅 버튼 - 아이콘 전용 */
+.btn-chat {
+    position: absolute; /* 추가: 절대 위치 */
+    top: 16px;         /* 추가: 상단에서 16px */
+    right: 16px;       /* 추가: 우측에서 16px */
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #3b82f6;
+    border: none;
+    color: white;
+    transition: all 0.2s ease;
+}
+
+.btn-chat:hover {
+    background: #2563eb;
+    transform: scale(1.05);
+}
+
+.btn-chat::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4-.8L3 20l1.2-3.6A7.96 7.96 0 713 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'/%3E%3C/svg%3E");
+    background-size: cover;
+}
+
+/* === 상태 배지 === */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 12px;
+    text-align: center;
+    background: #B6BCF7;
+    color: #374151;
+}
+
+.status-badge.planned {
+    background: #B6BCF7;
+    color: #374151;
+}
+
+.status-badge.ongoing {
+    background: #B6BCF7;
+    color: #374151;
+}
+
+.status-badge.finished {
+    background: #B6BCF7;
+    color: #374151;
+}
+
+.status-badge.cancelled {
+    background: #B6BCF7;
+    color: #374151;
+}
+
+.status-badge.pending {
+    background: #B6BCF7;
+    color: #374151;
+}
+
+.status-badge.accepted {
+    background: #B6BCF7;
+    color: #374151;
+}
+
+.status-badge.rejected {
+    background: #B6BCF7;
+    color: #374151;
+}
+
+/* === 등록 버튼 === */
+.register-btn {
+    width: auto;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: auto;
+    display: block;
+    background: #14229c;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+}
+
+.register-btn:hover {
+    background: #3a46c4;
+    box-shadow: 0 4px 12px rgba(75, 90, 228, 0.3);
+    transform: translateY(-1px);
+}
+
+/* === 빈 상태 === */
+.empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6b7280;
+    font-size: 0.9rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 2px dashed #d1d5db;
+}
+
+/* === 반응형 === */
+@media (max-width: 480px) {
+    .popup-card, .rent-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .popup-card .right-actions, .rent-card .right-actions {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 12px;
+    }
+
+    .rent-card .left {
+        width: 100%;
+    }
+
+    .action-left, .action-right {
+        flex-wrap: wrap;
+    }
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>미션 관리 - POPPIN</title>
+    <link rel="stylesheet" href="/css/admin-layout.css"/>
+    <link rel="stylesheet" href="/css/mission-management.css"/>
+</head>
+<body>
+<!-- Header -->
+<div class="admin-container">
+    <div id="admin-header-container"></div>
+
+    <div class="main-content" id="main-content">
+        <!-- Page Title -->
+        <div class="page-header">
+            <h1>미션 관리</h1>
+            <div class="right-actions">
+                <button class="button button-primary" id="createMissionSetBtn">미션셋 등록</button>
+            </div>
+        </div>
+        <!-- Filters -->
+        <div class="filter-container account-upgrade">
+            <div class="filter-group">
+                <label for="popupFilter">팝업:</label>
+                <select id="popupFilter">
+                    <option value="">전체</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="searchKeyword">검색:</label>
+                <input type="text" id="searchKeyword" placeholder="미션 제목, 설명 검색..."/>
+            </div>
+            <button class="button-primary button" id="searchBtn">검색</button>
+            <button class="button-secondary button" id="resetBtn">초기화</button>
+        </div>
+
+        <!-- Table -->
+        <div id="tableContainer">
+            <div class="loading">데이터를 불러오는 중...</div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content popup-detail-modal">
+            <div class="modal-header">
+                <h2>미션셋 상세</h2>
+                <span class="close" id="modalCloseBtn">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-actions">
+                <button class="button button-primary" id="addMissionBtn">미션 추가</button>
+                <button class="button button-danger-outline" id="deleteSetBtn">미션셋 삭제</button>
+                <button class="button button-secondary" id="closeModalBtn">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create MissionSet Modal -->
+    <div id="createSetModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>미션셋 등록</h2>
+                <span class="close" id="createSetCloseBtn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="two-col">
+                    <div class="form-group">
+                        <label>팝업 선택</label>
+                        <select id="createPopupId" required>
+                            <option value="">로딩 중...</option>
+                        </select>
+                        <small style="color:#666;">선택 시 내부적으로 팝업 ID가 값으로 전달됩니다.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>필요 완료 수(requiredCount)</label>
+                        <input type="number" id="createRequiredCount" min="0" value="0"/>
+                    </div>
+                    <div class="form-group">
+                        <label>리워드 PIN(선택)</label>
+                        <input type="text" id="createRewardPin" maxlength="80" placeholder="스태프 인증용 PIN"/>
+                    </div>
+                    <div class="form-group">
+                        <label>상태</label>
+                        <select id="createStatus">
+                            <option value="ENABLED" selected>ENABLED</option>
+                            <option value="DISABLED">DISABLED</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="button button-primary" id="createSetConfirmBtn">등록</button>
+                <button class="button button-secondary" id="createSetCancelBtn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Mission Modal -->
+    <div id="addMissionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>미션 추가</h2>
+                <span class="close" id="addMissionCloseBtn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>제목</label>
+                    <input type="text" id="missionTitle" maxlength="100" placeholder="미션 제목"/>
+                </div>
+                <div class="form-group">
+                    <label>설명</label>
+                    <textarea id="missionDesc" rows="4" maxlength="1000" placeholder="미션 설명 (선택)"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>정답</label>
+                    <input type="text" id="missionAnswer" maxlength="255" placeholder="정답/코드"/>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="button button-primary" id="addMissionConfirmBtn">추가</button>
+                <button class="button btn-secondary" id="addMissionCancelBtn">취소</button>
+            </div>
+        </div>
+    </div>
+    <!-- Admin Footer -->
+    <div id="admin-footer-container"></div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/admin-layout.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+<script src="/js/admin/report-management.js"></script>
+<script src="/js/admin/mission-management.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+</body>
+</html>

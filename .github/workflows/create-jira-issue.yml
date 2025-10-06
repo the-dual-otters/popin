@@ -1,0 +1,173 @@
+name: Create Jira Sub-task
+on:
+  issues:
+    types:
+      - opened
+permissions:
+  contents: write
+  issues: write
+jobs:
+  create-issue:
+    name: Create Jira Sub-task
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+      - name: Checkout main code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Issue Parser
+        uses: stefanbuck/github-issue-parser@v3
+        id: issue-parser
+        with:
+          template-path: .github/ISSUE_TEMPLATE/issue-form.yml
+      - name: Log Issue Parser
+        run: |
+          echo 'Parent Key: ${{ steps.issue-parser.outputs.issueparser_parentKey }}'
+      - name: Check if parent key exists
+        id: check-parent
+        run: |
+          PARENT_KEY="${{ steps.issue-parser.outputs.issueparser_parentKey }}"
+          if [ -z "$PARENT_KEY" ] || [ "$PARENT_KEY" = "" ]; then
+            echo "❌ Parent key is required for Sub-task creation"
+            echo "HAS_PARENT=false" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo "✅ Parent key found: $PARENT_KEY"
+            echo "HAS_PARENT=true" >> $GITHUB_OUTPUT
+          fi
+      - name: Map GitHub user to Jira assignee
+        id: map-user
+        shell: bash
+        run: |
+          GITHUB_AUTHOR="${{ github.event.issue.user.login }}"
+          echo "GitHub author: $GITHUB_AUTHOR"
+
+          case "$GITHUB_AUTHOR" in
+            "yoohyebin")
+              echo "JIRA_ASSIGNEE_ID=712020:7ca57986-fe55-494f-8995-4fbf2b586bd3" >> $GITHUB_ENV
+              echo "HAS_ASSIGNEE=true" >> $GITHUB_ENV
+              ;;
+            "onejm")
+              echo "JIRA_ASSIGNEE_ID=624fc821f3824d006a5d8cf9" >> $GITHUB_ENV
+              echo "HAS_ASSIGNEE=true" >> $GITHUB_ENV
+              ;;
+            "beakjinu")
+              echo "JIRA_ASSIGNEE_ID=712020:ecf19fdf-504c-4c4a-8464-19e088799956" >> $GITHUB_ENV
+              echo "HAS_ASSIGNEE=true" >> $GITHUB_ENV
+              ;;
+            "dearjh36")
+              echo "JIRA_ASSIGNEE_ID=712020:a1ad50de-c19a-489f-8890-097f05f91867" >> $GITHUB_ENV
+              echo "HAS_ASSIGNEE=true" >> $GITHUB_ENV
+              ;;
+            "sun-ryu")
+              echo "JIRA_ASSIGNEE_ID=712020:da1e48f7-8497-4e18-acb4-9698d333f267" >> $GITHUB_ENV
+              echo "HAS_ASSIGNEE=true" >> $GITHUB_ENV
+              ;;
+            *)
+              echo "No Jira mapping for $GITHUB_AUTHOR"
+              echo "HAS_ASSIGNEE=false" >> $GITHUB_ENV
+              ;;
+          esac
+
+      - name: Convert markdown to Jira Syntax
+        uses: peter-evans/jira2md@v1
+        id: md2jira
+        with:
+          input-text: |
+            ### Github Issue Link
+            - ${{ github.event.issue.html_url }}
+            
+            ### Created by
+            GitHub User: [${{ github.event.issue.user.login }}](${{ github.event.issue.user.html_url }})
+            
+            ### Issue Details
+            ${{ github.event.issue.body }}
+          mode: md2jira
+      - name: Create Sub-task (with assignee)
+        id: create-with-assignee
+        if: env.HAS_ASSIGNEE == 'true'
+        uses: atlassian/gajira-create@v3
+        with:
+          project: POP
+          issuetype: 하위 작업
+          summary: '${{ github.event.issue.title }}'
+          description: '${{ steps.md2jira.outputs.output-text }}'
+          fields: |
+            {
+              "parent": {
+                "key": "${{ steps.issue-parser.outputs.issueparser_parentKey }}"
+              },
+              "assignee": {
+                "id": "${{ env.JIRA_ASSIGNEE_ID }}"
+              }
+            }
+      - name: Create Sub-task (without assignee)
+        id: create-without-assignee
+        if: env.HAS_ASSIGNEE == 'false'
+        uses: atlassian/gajira-create@v3
+        with:
+          project: POP
+          issuetype: 하위 작업
+          summary: '${{ github.event.issue.title }}'
+          description: '${{ steps.md2jira.outputs.output-text }}'
+          fields: |
+            {
+              "parent": {
+                "key": "${{ steps.issue-parser.outputs.issueparser_parentKey }}"
+              }
+            }
+      - name: Set issue number
+        id: create
+        run: |
+          if [ "${{ env.HAS_ASSIGNEE }}" == "true" ]; then
+            echo "issue=${{ steps.create-with-assignee.outputs.issue }}" >> $GITHUB_OUTPUT
+          else
+            echo "issue=${{ steps.create-without-assignee.outputs.issue }}" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Transition to In Progress
+        uses: atlassian/gajira-transition@v3
+        with:
+          issue: ${{ steps.create.outputs.issue }}
+          transition: '진행 중'
+          
+      - name: Create branch with proper authentication
+        run: |
+          # Git 설정
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 인증된 원격 URL 설정
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          
+          # feature/JIRA번호 형태로 브랜치 생성
+          JIRA_ISSUE_NUMBER="${{ steps.create.outputs.issue }}"
+          BRANCH_NAME="feature/${JIRA_ISSUE_NUMBER}"
+          
+          echo "Creating branch: $BRANCH_NAME"
+          git checkout -b "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"
+      - name: Update issue title
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'update-issue'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: '[${{ steps.create.outputs.issue }}] ${{ github.event.issue.title }}'
+      - name: Add comment with Jira issue link
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            🎫 **Jira Sub-task Created:** [${{ steps.create.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})
+            👆 **Parent Issue:** ${{ steps.issue-parser.outputs.issueparser_parentKey }}
+            🌿 **Branch Created:** `feature/${{ steps.create.outputs.issue }}`
+            👤 **Created by:** @${{ github.event.issue.user.login }}

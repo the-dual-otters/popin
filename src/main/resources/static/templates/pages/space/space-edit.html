@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title id="page-title">POPIN | 공간 수정</title>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+
+    <!-- 공간 수정 폼 전용 CSS (등록과 동일) -->
+    <link rel="stylesheet" href="/css/space/space-register.css">
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <main id="main-content" class="main-content">
+        <section class="block">
+            <h3 class="block-title">공간 수정</h3>
+            <div class="card popup-form">
+                <form id="space-edit-form" enctype="multipart/form-data">
+
+                    <!-- 주소 검색 -->
+                    <div class="form-group">
+                        <label for="roadAddress">도로명 주소 <span class="required">*</span></label>
+                        <input type="text" id="roadAddress" name="roadAddress" readonly required />
+                    </div>
+                    <div class="form-group">
+                        <label for="jibunAddress">지번 주소</label>
+                        <input type="text" id="jibunAddress" name="jibunAddress" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label for="detailAddress">상세 주소</label>
+                        <input type="text" id="detailAddress" name="detailAddress" placeholder="상세 주소 입력" />
+                    </div>
+                    <button type="button" id="btn-search-address" class="btn-secondary">주소 검색</button>
+
+                    <!-- 제목 -->
+                    <div class="form-group">
+                        <label for="title">제목 <span class="required">*</span></label>
+                        <input type="text" id="title" name="title" required maxlength="200" />
+                    </div>
+
+                    <!-- 상세 설명 -->
+                    <div class="form-group">
+                        <label for="description">상세 설명</label>
+                        <textarea id="description" name="description" rows="4" maxlength="1000" placeholder="공간에 대한 상세 설명을 입력해주세요"></textarea>
+                    </div>
+
+                    <!-- 임대료 -->
+                    <div class="form-group">
+                        <label for="rentalFee">임대료 (원/일) <span class="required">*</span></label>
+                        <input type="number" id="rentalFee" name="rentalFee" required min="0" max="999999999" />
+                    </div>
+
+                    <!-- 면적 -->
+                    <div class="form-group">
+                        <label for="areaSize">면적 (m²) <span class="required">*</span></label>
+                        <input type="number" id="areaSize" name="areaSize" required min="1" />
+                    </div>
+
+                    <!-- 임대 기간 -->
+                    <div class="form-group">
+                        <label for="startDate">임대 시작일 <span class="required">*</span></label>
+                        <input type="date" id="startDate" name="startDate" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">임대 종료일 <span class="required">*</span></label>
+                        <input type="date" id="endDate" name="endDate" required />
+                    </div>
+
+                    <!-- 연락처 -->
+                    <div class="form-group">
+                        <label for="contactPhone">연락처 <span class="required">*</span></label>
+                        <input type="text" id="contactPhone" name="contactPhone" required maxlength="20"
+                               pattern="^[0-9-+()\\s]+$" placeholder="010-1234-5678" />
+                    </div>
+
+                    <!-- 대표 이미지 -->
+                    <div class="form-group">
+                        <label for="image">대표 이미지</label>
+                        <input type="file" id="image" name="image" accept="image/*" />
+                    </div>
+
+                    <!-- 버튼 -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">수정 완료</button>
+                        <button type="button" class="btn-secondary" data-act="back">취소</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container"></div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<script src="/js/space/space-edit.js"></script>
+
+<!-- 카카오 주소 검색 API -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<!-- 애플리케이션 초기화 -->
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        await loadComponents();
+        initializeLayout();
+
+        const manager = new SpaceEditManager();
+        await manager.initialize();
+    });
+</script>
+</body>
+</html>

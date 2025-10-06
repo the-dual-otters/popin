@@ -1,0 +1,75 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신고 관리 - POPPIN</title>
+    <link rel="stylesheet" href="/css/report-management.css">
+    <link rel="stylesheet" href="/css/admin-layout.css">
+</head>
+<body>
+<div class="admin-container">
+    <div id="admin-header-container"></div>
+    <div class="main-content" id="main-content">
+        <!-- Page Title -->
+        <div class="page-header">
+            <h1>신고 관리</h1>
+        </div>
+
+        <!-- Management Cards -->
+        <nav class="management-cards">
+            <a class="card popup-report" href="/templates/admin/popup-report.html" aria-label="팝업 신고 처리하러 가기">
+                <div class="card-content">
+                    <div class="card-title">팝업 신고 <span class="badge" id="popupReportCount">0</span></div>
+                    <div class="card-sub">처리하러 가기 ›</div>
+                </div>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="9 6 15 12 9 18"></polyline>
+                </svg>
+            </a>
+
+            <a class="card space-report" href="/templates/admin/space-report.html" aria-label="장소 대여 신고 처리하러 가기">
+                <div class="card-content">
+                    <div class="card-title">장소 대여 신고 <span class="badge" id="spaceReportCount">0</span></div>
+                    <div class="card-sub">처리하러 가기 ›</div>
+                </div>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="9 6 15 12 9 18"></polyline>
+                </svg>
+            </a>
+
+            <a class="card review-report" href="/templates/admin/review-report.html" aria-label="리뷰 신고 처리하러 가기">
+                <div class="card-content">
+                    <div class="card-title">리뷰 신고 <span class="badge" id="reviewReportCount">0</span></div>
+                    <div class="card-sub">처리하러 가기 ›</div>
+                </div>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="9 6 15 12 9 18"></polyline>
+                </svg>
+            </a>
+
+            <a class="card general-report" href="/templates/admin/general-report.html" aria-label="일반 신고 처리하러 가기">
+                <div class="card-content">
+                    <div class="card-title">일반 신고 <span class="badge" id="generalReportCount">0</span></div>
+                    <div class="card-sub">처리하러 가기 ›</div>
+                </div>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="9 6 15 12 9 18"></polyline>
+                </svg>
+            </a>
+        </nav>
+    </div>
+    <!-- Admin Footer -->
+    <div id="admin-footer-container"></div>
+</div>
+<script src="/js/api.js"></script>
+<script src="/js/admin-layout.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+<script src="/js/admin/report-management.js"></script>
+<script src="/js/admin/mission-management.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+</body>
+</html>

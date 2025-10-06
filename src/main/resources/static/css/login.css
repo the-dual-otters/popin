@@ -1,0 +1,121 @@
+/* --- Layout --- */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: #ffffff;
+    padding: 80px 16px;
+    box-sizing: border-box;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 340px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* --- Header --- */
+.login-header { margin-bottom: 24px; text-align: center; }
+.login-logo { display: none; }
+.login-title { margin: 0 0 8px; font-size: 18px; font-weight: 700; color: #111827; }
+.login-subtitle { display: none; }
+
+/* --- Alert Styles (수정됨) --- */
+.alert {
+    display: none;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    animation: slideIn 0.3s ease-out;
+}
+
+.alert-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-color: #a7f3d0;
+}
+
+.alert-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-color: #fca5a5;
+}
+
+.alert-info {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border-color: #93c5fd;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Form --- */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px; }
+.form-input {
+    width: 100%; height: 44px; padding: 0 14px;
+    border: 1px solid #e5e7eb; border-radius: 10px;
+    font-size: 14px; background: #fff;
+    transition: border-color .15s, box-shadow .15s; box-sizing: border-box;
+}
+.form-input::placeholder { color: #9ca3af; }
+.form-input:focus { outline: none; border-color: #c7d2fe; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+.form-input.error { border-color: #ef4444; background: #fef2f2; }
+.form-input.error:focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
+
+.field-error { display: none; margin-top: 6px; font-size: 12px; color: #ef4444; }
+.form-input.error + .field-error { display: block; }
+
+/* --- Buttons --- */
+.login-btn,
+.signup-link a {
+    width: 100%; height: 44px;
+    border: 0; border-radius: 12px;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer;
+    transition: transform .05s ease, filter .15s ease, background-color .15s ease;
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* 로그인 버튼 */
+.login-btn {
+    background: #4f56f5; color: #fff; margin: 8px 0 14px;
+}
+.login-btn:hover:not(:disabled) { filter: brightness(1.05); transform: translateY(-1px); }
+.login-btn:active:not(:disabled) { transform: translateY(0); }
+.login-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+/* 로딩 스피너 */
+.loading { display: none; width: 18px; height: 18px; border: 2px solid transparent; border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
+.btn-loading { color: transparent; }
+.btn-loading .loading { display: inline-block; position: absolute; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 회원가입 버튼 */
+.signup-link { text-align: center; font-size: 13px; color: #6b7280; }
+.signup-link a { background: #4f56f5; color: #fff; font-weight: 700; text-decoration: none; }
+.signup-link a:hover { filter: brightness(1.05); }
+
+/* 기업용 회원가입 */
+.enterprise-link {
+    display: block; text-align: center;
+    margin-top: 16px; font-size: 12px; color: #6b7280;
+}

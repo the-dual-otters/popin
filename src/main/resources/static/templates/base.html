@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">POPIN</title>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+
+    <!-- 페이지별 CSS 추가 가능 -->
+    <div id="additional-css"></div>
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content" id="main-content">
+        <!-- 기본 콘텐츠 또는 동적 로드될 콘텐츠 -->
+        <div class="content-section">
+            <h2 class="content-title">로딩 중...</h2>
+            <div class="loading"></div>
+        </div>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/router.js"></script>
+
+<!-- 페이지별 스크립트 추가 가능 -->
+<div id="additional-scripts"></div>
+
+<!-- 애플리케이션 초기화 -->
+<script>
+    // 페이지 로드 시 헤더/푸터 로드 및 앱 초기화
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadComponents();
+        initializeLayout();
+    });
+</script>
+</body>
+</html>

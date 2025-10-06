@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장소 관리 - POPIN</title>
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/space-management.css">
+</head>
+<body>
+<div class="admin-container">
+<!-- Header -->
+    <div id="admin-header-container"></div>
+    <div class="main-content" id="main-content">
+        <!-- Page Title & Stats -->
+        <div class="page-header">
+            <h1>장소 관리</h1>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-label">총 장소:</span>
+                    <span class="stat-value" id="totalSpaces">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">공개:</span>
+                    <span class="stat-value public" id="publicSpaces">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">비공개:</span>
+                    <span class="stat-value private" id="privateSpaces">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 필터 및 검색 영역 -->
+        <div class="filter-container account-upgrade">
+            <div class="filter-group">
+                <label for="ownerFilter">소유자:</label>
+                <input type="text" id="ownerFilter" placeholder="소유자 이름/이메일">
+            </div>
+            <div class="filter-group">
+                <label for="titleFilter">제목:</label>
+                <input type="text" id="titleFilter" placeholder="장소 제목">
+            </div>
+            <div class="filter-group">
+                <label for="isHiddenFilter">상태:</label>
+                <select id="isHiddenFilter">
+                    <option value="">전체</option>
+                    <option value="false">공개</option>
+                    <option value="true">숨김</option>
+                </select>
+            </div>
+            <button class="button button-primary" id="searchBtn">검색</button>
+            <button class="button button-secondary" id="resetBtn">초기화</button>
+        </div>
+
+        <!-- 테이블 영역 -->
+        <div class="table-container" id="tableContainer">
+            <div class="loading" id="searchLoading" style="display: none;">
+                데이터를 불러오는 중...
+            </div>
+
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>장소명</th>
+                    <th>소유자</th>
+                    <th>위치</th>
+                    <th>임대료</th>
+                    <th>상태</th>
+                    <th>등록일</th>
+                    <th>관리</th>
+                </tr>
+                </thead>
+                <tbody id="spacesTableBody">
+                <!-- 데이터가 동적으로 로드됩니다 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- 검색 결과 없음 안내 -->
+    <div class="no-results" id="noResults" style="display: none;">
+        <div class="no-results-content">
+            <h3>검색 결과가 없습니다</h3>
+            <p>다른 검색 조건으로 다시 시도해보세요.</p>
+        </div>
+    </div>
+
+    <!-- Admin Footer -->
+    <div id="admin-footer-container"></div>
+</div>
+
+<!-- 장소 상세보기 모달 -->
+<div id="spaceDetailModal" class="modal" style="display: none;">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h3>장소 상세 정보</h3>
+            <button type="button" class="modal-close" id="closeModal">&times;</button>
+        </div>
+        <div class="modal-body" id="spaceDetailContent">
+            <!-- 장소 상세 정보가 동적으로 로드됩니다 -->
+        </div>
+    </div>
+</div>
+
+<!-- 확인 모달 -->
+<div id="confirmModal" class="modal" style="display: none;">
+    <div class="modal-content small">
+        <div class="modal-header">
+            <h3 id="confirmTitle">확인</h3>
+            <button type="button" class="modal-close" id="confirmModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p id="confirmMessage">정말로 실행하시겠습니까?</p>
+            <div class="modal-actions">
+                <button class="button button-secondary" id="cancelBtn">취소</button>
+                <button class="button button-danger" id="confirmBtn">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript 파일들 로드 -->
+<script src="/js/api.js"></script>
+<script src="/js/admin-layout.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+<script src="/js/admin/report-management.js"></script>
+<script src="/js/admin/mission-management.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+<script src="/js/admin/SpaceManagementApi.js"></script>
+<script src="/js/admin/SpaceManagementUI.js"></script>
+<script src="/js/admin/SpaceManagementController.js"></script>
+<script src="/js/admin/popup-inquiry.js"></script>
+
+</body>
+
+</html>

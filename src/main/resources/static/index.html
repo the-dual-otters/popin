@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">POPIN</title>
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eaef006c7d0c88e0935a7d8745e99144"></script>
+
+    <!-- 공통 레이아웃 CSS -->
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/popup-list.css">
+    <link rel="stylesheet" href="/css/popup-search.css">
+    <link rel="stylesheet" href="/css/map.css">
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 영역 -->
+    <div id="header-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content" id="main-content">
+        <!-- 기본 로딩 표시 -->
+        <div class="content-section">
+            <h2 class="content-title">로딩 중...</h2>
+            <div class="loading"></div>
+        </div>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <div id="footer-container">
+        <!-- JavaScript로 동적 로드 -->
+    </div>
+</div>
+
+<!-- 모든 스크립트를 순차적으로 로드 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script>
+    // 스크립트 로드 완료 체크
+    let scriptsLoaded = {
+        layout: false,
+        popupList: false,
+        popupSearch: false,
+        map: false,
+        pages: false
+    };
+
+    let initializationStarted = false;
+
+    function checkAllScriptsLoaded() {
+        const allLoaded = Object.values(scriptsLoaded).every(loaded => loaded);
+        if (allLoaded && !initializationStarted) {
+            initializationStarted = true;
+            initializeApp();
+        }
+    }
+
+    async function initializeApp() {
+        try {
+            console.log('앱 초기화 시작...');
+
+            // 컴포넌트 로드 (헤더/푸터)
+            await loadComponents();
+            initializeLayout();
+
+            // 팝업 리스트 초기화
+            if (window.PopupListManager) {
+                const manager = new PopupListManager();
+                await manager.initialize();
+                console.log('팝업 리스트 초기화 완료');
+            } else {
+                throw new Error('PopupListManager가 정의되지 않았습니다.');
+            }
+
+        } catch (error) {
+            console.error('애플리케이션 초기화 실패:', error);
+
+            // 오류 발생 시 기본 오류 메시지 표시
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.innerHTML = `
+                <div class="content-section">
+                    <div class="alert alert-error">
+                        애플리케이션을 불러오는 중 오류가 발생했습니다.
+                        <br><small id="init-error-text"></small>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.location.reload()">
+                        새로고침
+                    </button>
+                </div>
+            `;
+                const t = document.getElementById('init-error-text');
+                if (t) t.textContent = `오류: ${String(error && error.message ? error.message : error)}`;
+            }
+        }
+    }
+</script>
+
+<script src="/js/layout.js" onload="scriptsLoaded.layout = true; checkAllScriptsLoaded();"></script>
+<script src="/js/ai-recommendation-cache.js"></script>
+<script src="/js/popup-list.js" onload="scriptsLoaded.popupList = true; checkAllScriptsLoaded();"></script>
+<script src="/js/popup-search.js" onload="scriptsLoaded.popupSearch = true; checkAllScriptsLoaded();"></script>
+<script src="/js/map.js" onload="scriptsLoaded.map = true; checkAllScriptsLoaded();"></script>
+<script src="/js/pages.js" onload="scriptsLoaded.pages = true; checkAllScriptsLoaded();"></script>
+
+<script>
+    // 전역 오류 처리
+    window.addEventListener('error', function(event) {
+        console.error('전역 오류:', event.error);
+    });
+
+    // Promise 거부 오류 처리
+    window.addEventListener('unhandledrejection', function(event) {
+        console.error('처리되지 않은 Promise 거부:', event.reason);
+    });
+
+    // 팝업 상세로 이동하는 전역 함수
+    function goToPopupDetail(popupId) {
+        console.log('팝업 상세 이동:', popupId);
+
+        if (!popupId || !/^\d+$/.test(String(popupId))) {
+            console.warn('잘못된 팝업 ID:', popupId);
+            alert('잘못된 팝업 정보입니다.');
+            return;
+        }
+
+        // 새로운 URL 구조로 이동
+        window.location.href = `/popup/${encodeURIComponent(popupId)}`;
+    }
+
+    // 전역 등록
+    window.goToPopupDetail = goToPopupDetail;
+</script>
+</body>
+</html>

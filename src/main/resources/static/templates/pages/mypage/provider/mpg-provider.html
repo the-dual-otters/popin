@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이페이지 - 공간제공자 | POPIN</title>
+
+  <!-- 공통 레이아웃 CSS -->
+  <link rel="stylesheet" href="/css/layout.css">
+  <!-- 페이지 전용 스타일 -->
+  <link rel="stylesheet" href="/css/mypage/provider/mpg-provider.css">
+</head>
+<body>
+<div class="mobile-container">
+  <!-- 헤더 영역 -->
+  <div id="header-container"></div>
+
+  <!-- 메인 콘텐츠 영역 -->
+  <main class="main-content" id="main-content">
+    <div class="container mypage-provider">
+      <!-- 헤더 -->
+      <div class="section-title">
+        <h2>마이페이지 - 공간제공자</h2>
+      </div>
+      <br>
+
+      <!-- 사용자 정보 섹션 -->
+      <section class="block user-info">
+        <div class="card">
+          <div class="mypage-info">
+            <div class="info-row">
+              <div class="info-label">아이디</div>
+              <div class="info-value-row">
+                <span id="user-email" class="info-value">-</span>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">이름</div>
+              <div class="info-value-row">
+                <span id="user-name" class="info-value">-</span>
+                <button class="edit-btn">수정</button>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">닉네임</div>
+              <div class="info-value-row">
+                <span id="user-nickname" class="info-value">-</span>
+                <button class="edit-btn">수정</button>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-label">연락처</div>
+              <div class="info-value-row">
+                <span id="user-phone" class="info-value">-</span>
+                <button class="edit-btn">수정</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 등록 장소 -->
+      <section class="block">
+        <h3 class="block-title">등록 장소</h3>
+        <div id="provider-space-list" class="card-list">
+          <div class="empty" data-empty>
+            아직 등록된 공간이 없습니다.
+          </div>
+        </div>
+      </section>
+
+      <!-- 받은 예약 요청 -->
+      <section class="block">
+        <h3 class="block-title">받은 예약 요청</h3>
+
+        <!-- 예약 현황 통계 -->
+        <div id="reservation-stats" class="stats-grid">
+          <div class="stat-card filter-btn" data-status="PENDING">
+            <div class="stat-label">대기중</div>
+            <div class="stat-number" id="stat-pending">0</div>
+          </div>
+          <div class="stat-card filter-btn" data-status="ACCEPTED">
+            <div class="stat-label">승인됨</div>
+            <div class="stat-number" id="stat-accepted">0</div>
+          </div>
+          <div class="stat-card filter-btn" data-status="REJECTED">
+            <div class="stat-label">거절됨</div>
+            <div class="stat-number" id="stat-rejected">0</div>
+          </div>
+          <div class="stat-card filter-btn" data-status="ALL">
+            <div class="stat-label">전체</div>
+            <div class="stat-number" id="stat-total">0</div>
+          </div>
+        </div>
+
+        <!-- 예약자 카드 -->
+        <div id="reservation-list" class="card-list">
+          <div class="empty" data-empty>
+            아직 받은 예약 요청이 없습니다.
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 푸터 영역 -->
+  <div id="footer-container"></div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<!-- 페이지 전용 스크립트 -->
+<script src="/js/mypage/provider/mpg-provider.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async function() {
+
+    await loadComponents();
+    initializeLayout();
+
+    const manager = new ProviderManager();
+    await manager.initialize();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>역할 승격 요청 관리 - POPIN</title>
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/admin-role-upgrade.css">
+</head>
+<body>
+<div class="admin-container">
+    <div id="admin-header-container"></div>
+    <div class="main-content" id="main-content">
+        <!-- 페이지 제목 -->
+        <div class="page-header">
+            <h1>역할 승격 요청 관리</h1>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-label">대기중인 요청:</span>
+                    <span class="stat-value" id="pendingCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 필터 및 검색 영역 -->
+        <div class="filter-container account-upgrade">
+            <div class="filter-group">
+                <label for="statusFilter">승인 상태:</label>
+                <select id="statusFilter">
+                    <option value="">전체</option>
+                    <option value="PENDING">대기중</option>
+                    <option value="APPROVED">승인됨</option>
+                    <option value="REJECTED">반려됨</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="roleFilter">요청 역할:</label>
+                <select id="roleFilter">
+                    <option value="">전체</option>
+                    <option value="HOST">호스트</option>
+                    <option value="PROVIDER">공급자</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="searchKeyword">검색:</label>
+                <input type="text" id="searchKeyword" placeholder="이메일 검색...">
+            </div>
+            <button class="button button-primary" id="searchBtn">검색</button>
+            <button class="button button-secondary" id="resetBtn">초기화</button>
+        </div>
+
+        <!-- 테이블 영역 -->
+        <div id="tableContainer">
+            <div class="loading">데이터를 불러오는 중...</div>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+    <div id="admin-footer-container"></div>
+</div>
+
+<!-- 상세보기/처리 모달 -->
+<div id="detailModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>역할 승격 요청 상세</h2>
+            <span class="close" id="modalCloseBtn">&times;</span>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- 상세 내용이 여기에 로드됩니다 -->
+        </div>
+    </div>
+</div>
+<!-- JavaScript 파일들 로드 -->
+<script src="/js/api.js"></script>
+<script src="/js/admin-layout.js"></script>
+<script src="/js/role-upgrade/admin-role-upgrade.js"></script>
+</body>
+</html>

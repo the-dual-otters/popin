@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팝업 관리 - POPPIN</title>
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/popup-management.css">
+</head>
+<body>
+<div class="admin-container">
+    <!-- Header -->
+    <div id="admin-header-container"></div>
+
+    <div class="main-content" id="main-content">
+        <!-- Page Title -->
+        <div class="page-header">
+            <h1>팝업 관리</h1>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-label">총 팝업:</span>
+                    <span class="stat-value" id="totalCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">대기중:</span>
+                    <span class="stat-value pending" id="pendingCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">활성화:</span>
+                    <span class="stat-value active" id="activeCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-container account-upgrade">
+            <div class="filter-group">
+                <label for="statusFilter">상태:</label>
+                <select id="statusFilter">
+                    <option value="PLANNED">계획중</option>
+                    <option value="ONGOING">진행중</option>
+                    <option value="ENDED">종료됨</option>
+                    <option value="HIDDEN">숨김</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="categoryFilter">카테고리:</label>
+                <select id="categoryFilter">
+                    <option value="">전체</option>
+                    <!-- 동적으로 로드됨 -->
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="searchKeyword">검색:</label>
+                <input type="text" id="searchKeyword" placeholder="팝업명, 주최자 검색...">
+            </div>
+            <button class="button button-primary" id="searchBtn">검색</button>
+            <button class="button button-secondary" id="resetBtn">초기화</button>
+        </div>
+
+        <!-- Table Container -->
+        <div id="tableContainer">
+            <div class="loading">데이터를 불러오는 중...</div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>팝업 상세 정보</h2>
+                <span class="close" id="modalCloseBtn">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 동적으로 채워질 내용 -->
+            </div>
+            <div class="modal-actions">
+                <button class="button button-success" id="approveBtn" style="display:none;">승인</button>
+                <button class="button button-danger" id="rejectBtn" style="display:none;">거부</button>
+                <button class="button button-warning" id="suspendBtn" style="display:none;">정지</button>
+                <button class="button button-info" id="changeStatusBtn" style="display:none;">상태 변경</button>
+                <button class="button button-secondary" id="closeModalBtn">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rejection Reason Modal -->
+    <div id="rejectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>거부 사유 입력</h2>
+                <span class="close" id="rejectModalCloseBtn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="rejectReason">거부 사유:</label>
+                    <textarea id="rejectReason" rows="4" placeholder="거부 사유를 입력해주세요..." required></textarea>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="button button-danger" id="confirmRejectBtn">거부 확정</button>
+                <button class="button button-secondary" id="cancelRejectBtn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Change Modal -->
+    <div id="statusSelectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>팝업 상태 변경</h2>
+                <span class="close" id="statusModalCloseBtn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newStatusSelect">변경할 상태:</label>
+                    <select id="newStatusSelect" class="form-control">
+                        <option value="">상태를 선택하세요</option>
+                    </select>
+                    <div class="status-description">
+                        <small class="text-muted">
+                            • 계획중: 팝업이 계획 단계에 있음<br>
+                            • 진행중: 팝업이 현재 운영 중<br>
+                            • 종료됨: 팝업이 정상적으로 종료됨<br>
+                            • 숨김: 팝업이 숨겨짐 (비공개)
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="button button-primary" id="confirmStatusBtn">상태 변경</button>
+                <button class="button button-secondary" id="cancelStatusBtn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Footer -->
+    <div id="admin-footer-container"></div>
+</div>
+<script src="/js/api.js"></script>
+<script src="/js/admin-layout.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+<script src="/js/admin/report-management.js"></script>
+<script src="/js/admin/mission-management.js"></script>
+<script src="/js/admin/popup-management.js"></script>
+</body>
+</html>

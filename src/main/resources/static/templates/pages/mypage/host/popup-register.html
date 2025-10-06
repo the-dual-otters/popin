@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>팝업 등록 | POPIN</title>
+
+    <!-- 공통 CSS -->
+    <link rel="stylesheet" href="/css/layout.css"/>
+    <!-- 페이지 전용 CSS -->
+    <link rel="stylesheet" href="/css/mypage/host/popup-register.css"/>
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더 -->
+    <div id="header-container"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main-content" id="main-content">
+        <div class="container">
+            <h2 class="section-title">팝업 등록</h2>
+
+            <form id="popup-register-form">
+                <div class="form-group">
+                    <label for="title">제목</label>
+                    <input type="text" id="title" name="title" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="summary">요약</label>
+                    <input type="text" id="summary" name="summary" />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">설명</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="startDate">시작일</label>
+                    <input type="date" id="startDate" name="startDate" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="endDate">종료일</label>
+                    <input type="date" id="endDate" name="endDate" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="entryFee">입장료</label>
+                    <input type="number" id="entryFee" name="entryFee" value="0" />
+                </div>
+
+                <!-- 카테고리 선택 -->
+                <div class="form-group">
+                    <label for="categoryId">카테고리</label>
+                    <select id="categoryId" name="categoryId" required>
+                        <option value="">카테고리를 선택하세요</option>
+                        <option value="1">패션</option>
+                        <option value="2">반려동물</option>
+                        <option value="3">게임</option>
+                        <option value="4">캐릭터/IP</option>
+                        <option value="5">문화/컨텐츠</option>
+                        <option value="6">연예</option>
+                        <option value="7">여행/레저/스포츠</option>
+                    </select>
+                </div>
+
+                <!-- 태그 선택 -->
+                <div class="form-group">
+                    <label>태그 선택</label>
+                    <div id="tag-container" class="tag-container">
+                        <button type="button" class="tag-btn" data-id="1">할인</button>
+                        <button type="button" class="tag-btn" data-id="2">한정판</button>
+                        <button type="button" class="tag-btn" data-id="3">체험존</button>
+                        <button type="button" class="tag-btn" data-id="4">콜라보</button>
+                        <button type="button" class="tag-btn" data-id="5">신제품</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><input type="checkbox" id="reservationAvailable" /> 예약 가능 여부</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="reservationLink">예약 링크</label>
+                    <input type="text" id="reservationLink" name="reservationLink" />
+                </div>
+
+                <div class="form-group">
+                    <label><input type="checkbox" id="waitlistAvailable" /> 대기자 등록 가능 여부</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="notice">공지사항</label>
+                    <textarea id="notice" name="notice"></textarea>
+                </div>
+
+                <!-- 대표 이미지 -->
+                <div class="form-group">
+                    <label for="mainImageFile">대표 이미지</label>
+                    <input type="file" id="mainImageFile" accept="image/*" />
+                    <input type="hidden" id="mainImageUrl" name="mainImageUrl" />
+                    <div id="mainImagePreview" class="image-preview"></div>
+                </div>
+
+                <!-- 추가 이미지 -->
+                <div class="form-group">
+                    <label>추가 이미지</label>
+                    <input type="file" id="extraImageFiles" accept="image/*" multiple />
+                    <div id="extraImagePreview" class="image-preview"></div>
+                </div>
+
+                <!-- 운영 시간 -->
+                <div class="form-group">
+                    <label>운영 시간</label>
+                    <div id="hours-container"></div>
+                    <button type="button" id="add-hour-btn" class="btn-secondary small">운영시간 추가</button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">등록하기</button>
+                    <button type="button" class="btn-secondary" onclick="history.back()">취소</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <div id="footer-container"></div>
+</div>
+
+<!-- 공통 스크립트 -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<!-- 페이지 전용 스크립트 -->
+<script src="/js/mypage/host/popup-register.js"></script>
+</body>
+</html>

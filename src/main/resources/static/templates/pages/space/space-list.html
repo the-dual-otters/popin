@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>팝업 공간 대여 - 목록</title>
+
+    <!-- 공통 레이아웃 -->
+    <link rel="stylesheet" href="/css/layout.css" />
+    <!-- 페이지 전용 CSS -->
+    <link rel="stylesheet" href="/css/space/space-list.css" />
+</head>
+<body>
+<div class="mobile-container">
+    <!-- 헤더/푸터는 layout.js로 로드 -->
+    <div id="header-container"></div>
+
+    <main class="main-content" id="main-content">
+        <div class="space-list-container">
+            <div class="page-header">
+                <h1 class="page-title">팝업 공간 대여</h1>
+                <a class="register-btn" href="#">등록하기</a>
+            </div>
+
+            <!-- 검색 영역 -->
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" id="searchKeyword" placeholder="제목, 설명으로 검색..." class="search-input">
+                    <button id="searchBtn" class="search-btn">검색</button>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="locationFilter">위치</label>
+                            <input type="text" id="locationFilter" placeholder="지역명, 주소" class="filter-input">
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="minArea">최소 면적 (m²)</label>
+                            <input type="number" id="minArea" placeholder="50" class="filter-input">
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="maxArea">최대 면적 (m²)</label>
+                            <input type="number" id="maxArea" placeholder="500" class="filter-input">
+                        </div>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button id="resetBtn" class="reset-btn">초기화</button>
+                        <button id="applyFilter" class="apply-btn">필터 적용</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 검색 결과 정보 -->
+            <div id="searchInfo" class="search-info" style="display: none;">
+                <span><span id="resultCount">0</span>개의 공간을 찾았습니다.</span>
+                <button id="clearSearch" class="clear-search-btn">전체보기</button>
+            </div>
+
+            <!-- 로딩 -->
+            <div id="loading" class="loading">공간 목록을 불러오는 중</div>
+
+            <!-- 목록 -->
+            <div id="spaceList"></div>
+
+            <!-- 빈 상태 -->
+            <div id="emptyState" class="empty-state" style="display:none;">
+                <div class="empty-icon">🏢</div>
+                <p>등록된 공간이 없습니다.</p><br />
+            </div>
+
+            <!-- 검색 결과 없음 -->
+            <div id="noSearchResult" class="empty-state" style="display:none;">
+                <div class="empty-icon">🔍</div>
+                <p>검색 결과가 없습니다.</p>
+                <button id="resetSearch" class="register-btn">검색 초기화</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+</div>
+
+<!-- 공통 JS -->
+<script src="/js/templateLoader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/layout.js"></script>
+<script src="/js/popup-list.js"></script>
+<script src="/js/popup-search.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/pages.js"></script>
+
+<!-- 페이지 JS -->
+<script src="/js/space/space-list.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadComponents();
+        initializeLayout();
+
+        document.querySelectorAll('.register-btn').forEach(btn => {
+            btn.addEventListener('click', () => Pages.spaceRegister());
+        });
+
+        const manager = new SpaceListManager();
+        await manager.initialize();
+    });
+</script>
+</body>
+</html>
