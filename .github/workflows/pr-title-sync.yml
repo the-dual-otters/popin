@@ -1,0 +1,73 @@
+name: Sync PR Title with Jira
+
+on:
+  pull_request:
+    types:
+      - opened
+
+permissions:
+  pull-requests: write
+
+jobs:
+  update-pr-title:
+    name: Update PR title with Jira issue info
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract Jira key from branch
+        id: extract-jira
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          echo "Branch name: $BRANCH_NAME"
+          
+          # 브랜치에서 JIRA 키 추출 (예: test/POPIN-2 → POPIN-2)
+          JIRA_KEY=$(echo "$BRANCH_NAME" | grep -oE '[A-Z]+-[0-9]+' | head -n1)
+          
+          if [ ! -z "$JIRA_KEY" ]; then
+            echo "Found Jira key: $JIRA_KEY"
+            echo "JIRA_KEY=$JIRA_KEY" >> $GITHUB_OUTPUT
+            echo "HAS_JIRA_KEY=true" >> $GITHUB_OUTPUT
+          else
+            echo "No Jira key found in branch name"
+            echo "HAS_JIRA_KEY=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get Jira issue title
+        if: steps.extract-jira.outputs.HAS_JIRA_KEY == 'true'
+        id: jira-issue
+        run: |
+          JIRA_KEY="${{ steps.extract-jira.outputs.JIRA_KEY }}"
+          
+          # Jira API로 이슈 정보 조회
+          ISSUE_JSON=$(curl -s -u ${{ secrets.JIRA_USER_EMAIL }}:${{ secrets.JIRA_API_TOKEN }} \
+            -H "Content-Type: application/json" \
+            "${{ secrets.JIRA_BASE_URL }}/rest/api/3/issue/${JIRA_KEY}")
+          
+          # 이슈 제목(summary) 추출
+          ISSUE_TITLE=$(echo "$ISSUE_JSON" | jq -r '.fields.summary // empty')
+          
+          if [ ! -z "$ISSUE_TITLE" ]; then
+            echo "Issue title: $ISSUE_TITLE"
+            echo "ISSUE_TITLE=$ISSUE_TITLE" >> $GITHUB_OUTPUT
+          else
+            echo "Could not fetch issue title"
+            echo "ISSUE_TITLE=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update PR title
+        if: steps.extract-jira.outputs.HAS_JIRA_KEY == 'true' && steps.jira-issue.outputs.ISSUE_TITLE != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const jiraKey = '${{ steps.extract-jira.outputs.JIRA_KEY }}';
+            const issueTitle = '${{ steps.jira-issue.outputs.ISSUE_TITLE }}';
+            const newTitle = `[${jiraKey}] ${issueTitle}`;
+            
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              title: newTitle
+            });
+            
+            console.log(`Updated PR title to: ${newTitle}`);
