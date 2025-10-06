@@ -8,10 +8,26 @@ body:
     attributes:
       label: '🎟️ 상위 작업 (Ticket Number)'
       description: '상위 작업의 Ticket Number를 기입해주세요'
-      placeholder: 'POP-00'
+      placeholder: 'POPIN-1'
     validations:
       required: true
-      
+
+  - type: dropdown
+    id: branchType
+    attributes:
+      label: '🌿 브랜치 타입'
+      description: '생성할 브랜치의 타입을 선택하세요'
+      options:
+        - feature
+        - fix
+        - refactor
+        - hotfix
+        - docs
+        - test
+      default: 0
+    validations:
+      required: true
+
   - type: input
     id: description
     attributes:

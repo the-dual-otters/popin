@@ -95,7 +95,7 @@ jobs:
         if: env.HAS_ASSIGNEE == 'true'
         uses: atlassian/gajira-create@v3
         with:
-          project: POP
+          project: POPIN
           issuetype: 하위 작업
           summary: '${{ github.event.issue.title }}'
           description: '${{ steps.md2jira.outputs.output-text }}'
@@ -113,7 +113,7 @@ jobs:
         if: env.HAS_ASSIGNEE == 'false'
         uses: atlassian/gajira-create@v3
         with:
-          project: POP
+          project: POPIN
           issuetype: 하위 작업
           summary: '${{ github.event.issue.title }}'
           description: '${{ steps.md2jira.outputs.output-text }}'
@@ -138,20 +138,19 @@ jobs:
           issue: ${{ steps.create.outputs.issue }}
           transition: '진행 중'
           
-      - name: Create branch with proper authentication
+      - name: Create branch with selected type
         run: |
-          # Git 설정
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # 인증된 원격 URL 설정
+
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          
-          # feature/JIRA번호 형태로 브랜치 생성
+
+          # 사용자가 선택한 브랜치 타입 가져오기
           JIRA_ISSUE_NUMBER="${{ steps.create.outputs.issue }}"
-          BRANCH_NAME="feature/${JIRA_ISSUE_NUMBER}"
-          
-          echo "Creating branch: $BRANCH_NAME"
+          BRANCH_TYPE="${{ steps.issue-parser.outputs.issueparser_branchType }}"
+          BRANCH_NAME="${BRANCH_TYPE}/${JIRA_ISSUE_NUMBER}"
+
+          echo "Creating branch: $BRANCH_NAME (type: $BRANCH_TYPE)"
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
       - name: Update issue title
@@ -169,5 +168,5 @@ jobs:
           body: |
             🎫 **Jira Sub-task Created:** [${{ steps.create.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})
             👆 **Parent Issue:** ${{ steps.issue-parser.outputs.issueparser_parentKey }}
-            🌿 **Branch Created:** `feature/${{ steps.create.outputs.issue }}`
+            🌿 **Branch Created:** `${{ steps.issue-parser.outputs.issueparser_branchType }}/${{ steps.create.outputs.issue }}`
             👤 **Created by:** @${{ github.event.issue.user.login }}
