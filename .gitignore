@@ -86,3 +86,7 @@ package-lock.json
 # Backup files
 *.bak
 *.backup
+
+#  OAuth & Local Secret Configuration
+# 실제 API 키/Secret이 포함된 로컬 설정 파일
+application-oauth-local.yml
