@@ -1,5 +1,6 @@
 package com.snow.popin.global.jwt;
 
+import com.snow.popin.domain.user.constant.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -144,4 +145,7 @@ public class JwtUtil {
         }
     }
 
+    public String createToken(String email, Role role) {
+        return createToken(email, "SocialUser", role.name());
+    }
 }
