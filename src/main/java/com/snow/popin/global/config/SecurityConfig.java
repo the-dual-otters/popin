@@ -2,6 +2,8 @@ package com.snow.popin.global.config;
 
 import com.snow.popin.global.constant.ErrorCode;
 import com.snow.popin.global.jwt.JwtFilter;
+import com.snow.popin.global.oauth.CustomOAuth2UserService;
+import com.snow.popin.global.oauth.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,9 +31,11 @@ import static com.snow.popin.global.error.ErrorResponseUtil.sendErrorResponse;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
@@ -46,18 +50,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .and()
+                .cors().and()
                 .csrf().disable()
-
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
                 .and()
 
                 .authorizeRequests(authz -> authz
                         // 정적 리소스
-                        .antMatchers("/uploads/**","/css/**", "/js/**", "/images/**",
+                        .antMatchers("/uploads/**", "/css/**", "/js/**", "/images/**",
                                 "/static/**", "/favicon.ico", "/templates/**", "/*.json",
                                 "/pages/**", "/error/**").permitAll()
 
@@ -71,19 +72,16 @@ public class SecurityConfig {
 
 
                         // 공개 페이지 - 로그인 없이 접근 가능
-                        .antMatchers("/", "/index.html", "/main").permitAll()
-                        .antMatchers("/popup/**", "/map").permitAll()
-                        .antMatchers("/space/**").permitAll()
-                        .antMatchers("/reviews/**").permitAll()
+                        .antMatchers("/", "/index.html", "/main",
+                                "/popup/**", "/map", "/space/**", "/reviews/**").permitAll()
 
                         // 인증 관련 API
-                        .antMatchers("/auth/**").permitAll()
-                        .antMatchers("/api/auth/**").permitAll()
+                        .antMatchers("/auth/**", "/api/auth/**").permitAll()
+                        //  OAuth2 로그인 관련 경로 추가
+                        .antMatchers("/oauth2/**", "/login/**", "/auth/success").permitAll()
 
                         // === 로그인이 필요한 페이지 ===
-                        .antMatchers("/mypage/**").authenticated()
-                        .antMatchers("/bookmarks/**").authenticated()
-                        .antMatchers("/chat/**").authenticated()
+                        .antMatchers("/mypage/**", "/bookmarks/**", "/chat/**").authenticated()
 
                         // === 로그인이 필요한 API (POST/PUT/DELETE) ===
                         .antMatchers(HttpMethod.POST, "/api/reviews/**").authenticated()
@@ -97,13 +95,21 @@ public class SecurityConfig {
                         .antMatchers("/api/host/**").authenticated()
 
                         // 관리자 페이지
-                        .antMatchers("/admins/**").hasRole("ADMIN")
-                        .antMatchers("/api/admin/**").hasRole("ADMIN")
+                        .antMatchers("/admins/**", "/api/admin/**").hasRole("ADMIN")
 
                         // === 나머지는 모두 허용 ===
                         .anyRequest().permitAll()
                 )
 
+                // OAuth2 로그인 설정
+                .oauth2Login(oauth -> oauth
+                        .userInfoEndpoint()
+                        .userService(customOAuth2UserService)
+                        .and()
+                        .successHandler(oAuth2LoginSuccessHandler)
+                )
+
+                // JWT 필터 등록
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
                 // 예외 처리

@@ -29,6 +29,12 @@ public class AuthViewController {
         return "forward:/templates/auth/signup.html";
     }
 
+    //소셜로그인
+    @GetMapping("/success")
+    public String socialLoginSuccess() {
+        return "forward:/templates/auth/success.html";
+    }
+
     @GetMapping("/logout")
     public String logout(HttpServletRequest req, HttpServletResponse res) {
 

@@ -97,7 +97,13 @@ public class JwtFilter extends OncePerRequestFilter {
             return true;
         }
 
-        // 공개 API (GET만) — 정말 공개인 것만 남김 (/api/categories는 제외)
+        // 소셜 로그인
+        if (path.startsWith("/oauth2/") || path.startsWith("/login/oauth2/")) {
+            log.debug("✅ OAuth2 로그인 경로 - 필터 제외");
+            return true;
+        }
+
+        // 공개 API - GET 요청만!
         if ("GET".equals(method)) {
             if (path.startsWith("/api/popups")
                     || path.startsWith("/api/spaces")

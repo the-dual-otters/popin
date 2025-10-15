@@ -119,3 +119,72 @@
     display: block; text-align: center;
     margin-top: 16px; font-size: 12px; color: #6b7280;
 }
+/*소셜 로그인*/
+.social-login {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.divider {
+    position: relative;
+    text-align: center;
+    margin: 20px 0;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.divider::before {
+    left: 0;
+}
+.divider::after {
+    right: 0;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.social-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.social-btn.kakao {
+    background: #fee500;
+    color: #000;
+}
+
+.social-btn.kakao:hover {
+    background: #fdd835;
+}
+
+.social-btn.naver {
+    background: #03c75a;
+    color: white;
+}
+
+.social-btn.naver:hover {
+    background: #02b150;
+}
