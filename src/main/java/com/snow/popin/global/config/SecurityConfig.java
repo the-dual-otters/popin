@@ -66,7 +66,9 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.GET, "/api/spaces/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/venues/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+
+                        .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
+
 
                         // 공개 페이지 - 로그인 없이 접근 가능
                         .antMatchers("/", "/index.html", "/main").permitAll()
