@@ -63,8 +63,13 @@ public class SecurityConfig {
                                 "/pages/**", "/error/**").permitAll()
 
                         // === 공개 API (GET만) ===
-                        .antMatchers(HttpMethod.GET, "/api/popups/**", "/api/spaces/**",
-                                "/api/reviews/**", "/api/venues/**", "/api/categories/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/popups/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/spaces/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/venues/**").permitAll()
+
+                        .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
+
 
                         // 공개 페이지 - 로그인 없이 접근 가능
                         .antMatchers("/", "/index.html", "/main",

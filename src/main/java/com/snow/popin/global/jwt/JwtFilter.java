@@ -1,9 +1,8 @@
 package com.snow.popin.global.jwt;
 
-import com.snow.popin.global.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,8 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.snow.popin.global.error.ErrorResponseUtil.sendErrorResponse;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -28,65 +25,46 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final JwtTokenResolver jwtTokenResolver;
-    private final ApplicationContext applicationContext;
 
-    private UserDetailsService getUserDetailsService() {
-        return applicationContext.getBean(UserDetailsService.class);
-    }
+    private final ObjectProvider<UserDetailsService> userDetailsServiceProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain chain) throws ServletException, IOException {
 
-        String requestURI = req.getRequestURI();
-        log.debug("🔍 JWT 필터 처리 시작 : {}", requestURI);
+        final String uri = req.getRequestURI();
 
         try {
-            String token = jwtTokenResolver.resolve(req);
+            final String token = jwtTokenResolver.resolve(req);
 
             if (StringUtils.hasText(token) && jwtUtil.validateToken(token)) {
+                final String email = jwtUtil.getEmail(token);
 
-                log.debug("✅ 토큰 유효함");
+                if (StringUtils.hasText(email)
+                        && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                String email = jwtUtil.getEmail(token);
+                    // 필요할 때만 가져온다 (여기가 포인트)
+                    UserDetailsService uds = userDetailsServiceProvider.getObject();
+                    UserDetails userDetails = uds.loadUserByUsername(email);
 
-                if (StringUtils.hasText(email)) {
-                    log.debug("토큰에서 이메일 추출 : {}", email);
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails, null, userDetails.getAuthorities());
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
 
-                    if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                        try {
-                            UserDetails userDetails = getUserDetailsService().loadUserByUsername(email);
-                            log.debug("사용자 정보 로드 완료 : {}", userDetails.getUsername());
-
-                            UsernamePasswordAuthenticationToken authenticationToken =
-                                    new UsernamePasswordAuthenticationToken(
-                                            userDetails, null, userDetails.getAuthorities()
-                                    );
-
-                            authenticationToken.setDetails(
-                                    new WebAuthenticationDetailsSource().buildDetails(req)
-                            );
-
-                            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                            log.debug("✅ 사용자 인증 설정 완료 : {}", email);
-
-                        } catch (Exception e) {
-                            log.warn("⚠️ 사용자 정보 로드 실패 (공개 페이지면 무시) : {}", e.getMessage());
-                            SecurityContextHolder.clearContext();
-                        }
-                    }
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                    log.debug("✅ JWT 인증 설정 완료: {}", email);
                 }
             } else {
-                log.debug("토큰 없음 또는 유효하지 않음 (공개 페이지는 계속 진행)");
+                log.debug("JWT 없음/무효 → 계속 진행 (공개 경로일 수 있음): {}", uri);
             }
         } catch (Exception e) {
-            log.error("❌ 필터에서 예외 발생: {} - {}", requestURI, e.getMessage(), e);
+            log.warn("JWT 필터 처리 중 예외 ({}): {}", uri, e.getMessage());
             SecurityContextHolder.clearContext();
         }
 
-        // 예외 발생 여부와 관계없이 필터 체인은 정확히 한 번만 실행
-        filterChain.doFilter(req, res);
+        chain.doFilter(req, res);
     }
 
     @Override
@@ -94,34 +72,28 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = req.getRequestURI();
         String method = req.getMethod();
 
-        log.debug("🔍 필터 제외 경로 확인 : {} [{}]", path, method);
-
         // 정적 리소스
-        if (path.startsWith("/css/") || path.startsWith("/js/") ||
-                path.startsWith("/images/") || path.startsWith("/static/") ||
-                path.startsWith("/uploads/") ||
-                path.equals("/favicon.ico") || path.startsWith("/templates/")) {
-            log.debug("✅ 정적 리소스 - 필터 제외");
+        if (path.startsWith("/css/") || path.startsWith("/js/")
+                || path.startsWith("/images/") || path.startsWith("/static/")
+                || path.startsWith("/uploads/") || path.equals("/favicon.ico")
+                || path.startsWith("/templates/")) {
             return true;
         }
 
         // 공개 페이지
-        if (path.equals("/") || path.equals("/index.html") ||
-                path.equals("/main") || path.equals("/error")) {
-            log.debug("✅ 공개 페이지 - 필터 제외");
+        if (path.equals("/") || path.equals("/index.html")
+                || path.equals("/main") || path.equals("/error")) {
             return true;
         }
 
-        // 팝업 관련 페이지
-        if (path.startsWith("/popup/") || path.startsWith("/map") ||
-                path.startsWith("/space/") || path.startsWith("/reviews/")) {
-            log.debug("✅ 공개 콘텐츠 페이지 - 필터 제외");
+        // 공개 컨텐츠 페이지
+        if (path.startsWith("/popup/") || path.startsWith("/map")
+                || path.startsWith("/space/") || path.startsWith("/reviews/")) {
             return true;
         }
 
         // 인증 페이지
         if (path.startsWith("/auth/")) {
-            log.debug("✅ 인증 페이지 - 필터 제외");
             return true;
         }
 
@@ -133,26 +105,25 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 공개 API - GET 요청만!
         if ("GET".equals(method)) {
-            if (path.startsWith("/api/popups") ||
-                    path.startsWith("/api/spaces") ||
-                    path.startsWith("/api/reviews") ||
-                    path.startsWith("/api/venues") ||
-                    path.startsWith("/api/categories")) {
-                log.debug("✅ 공개 API (GET) - 필터 제외");
+            if (path.startsWith("/api/popups")
+                    || path.startsWith("/api/spaces")
+                    || path.startsWith("/api/reviews")
+                    || path.startsWith("/api/venues")) {
                 return true;
             }
+            // 필요하면 "정확한 공개 엔드포인트"만 예외 추가:
+            // if (path.equals("/api/categories")) return true;
         }
 
-        // 인증 API (모든 메서드)
-        if (path.equals("/api/auth/login") ||
-                path.equals("/api/auth/signup") ||
-                path.equals("/api/auth/check-email") ||
-                path.equals("/api/auth/check-nickname")) {
-            log.debug("✅ 인증 API - 필터 제외");
+        // 인증 API
+        if (path.equals("/api/auth/login")
+                || path.equals("/api/auth/signup")
+                || path.equals("/api/auth/check-email")
+                || path.equals("/api/auth/check-nickname")) {
             return true;
         }
 
-        log.debug("❌ 보호된 경로 - 필터 적용");
+        // 그 외는 필터 적용
         return false;
     }
 }
