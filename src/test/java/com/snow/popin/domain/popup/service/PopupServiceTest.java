@@ -7,7 +7,6 @@ import com.snow.popin.domain.popup.dto.response.PopupListResponseDto;
 import com.snow.popin.domain.popup.dto.response.PopupSummaryResponseDto;
 import com.snow.popin.domain.popup.entity.Popup;
 import com.snow.popin.domain.popup.entity.PopupStatus;
-import com.snow.popin.domain.popup.repository.PopupQueryDslRepository;
 import com.snow.popin.domain.popup.repository.PopupRepository;
 import com.snow.popin.domain.recommendation.dto.AiRecommendationResponseDto;
 import com.snow.popin.domain.recommendation.service.AiRecommendationService;
@@ -40,10 +39,7 @@ class PopupServiceTest {
 
     @Mock
     private PopupRepository popupRepository;
-
-    @Mock
-    private PopupQueryDslRepository popupQueryDslRepository;
-
+    
     @Mock
     private AiRecommendationService aiRecommendationService;
 
@@ -68,7 +64,7 @@ class PopupServiceTest {
         );
         Page<Popup> pageResult = new PageImpl<>(popups);
 
-        when(popupQueryDslRepository.findAllWithStatusFilter(eq(status), any(Pageable.class)))
+        when(popupRepository.findAllWithStatusFilter(eq(status), any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
@@ -77,7 +73,7 @@ class PopupServiceTest {
         // then
         assertThat(result.getPopups()).hasSize(2);
         assertThat(result.getTotalElements()).isEqualTo(2);
-        verify(popupQueryDslRepository).findAllWithStatusFilter(eq(status), any(Pageable.class));
+        verify(popupRepository).findAllWithStatusFilter(eq(status), any(Pageable.class));
     }
 
     @Test
@@ -91,7 +87,7 @@ class PopupServiceTest {
         );
         Page<Popup> pageResult = new PageImpl<>(popups);
 
-        when(popupQueryDslRepository.findPopularActivePopups(any(Pageable.class)))
+        when(popupRepository.findPopularActivePopups(any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
@@ -99,7 +95,7 @@ class PopupServiceTest {
 
         // then
         assertThat(result.getPopups()).hasSize(2);
-        verify(popupQueryDslRepository).findPopularActivePopups(any(Pageable.class));
+        verify(popupRepository).findPopularActivePopups(any(Pageable.class));
     }
 
     @Test
@@ -112,7 +108,7 @@ class PopupServiceTest {
         );
         Page<Popup> pageResult = new PageImpl<>(popups);
 
-        when(popupQueryDslRepository.findDeadlineSoonPopups(eq(status), any(Pageable.class)))
+        when(popupRepository.findDeadlineSoonPopups(eq(status), any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
@@ -120,7 +116,7 @@ class PopupServiceTest {
 
         // then
         assertThat(result.getPopups()).hasSize(1);
-        verify(popupQueryDslRepository).findDeadlineSoonPopups(eq(status), any(Pageable.class));
+        verify(popupRepository).findDeadlineSoonPopups(eq(status), any(Pageable.class));
     }
 
     @Test
@@ -136,7 +132,7 @@ class PopupServiceTest {
         );
         Page<Popup> pageResult = new PageImpl<>(popups);
 
-        when(popupQueryDslRepository.findByRegionAndDateRange(
+        when(popupRepository.findByRegionAndDateRange(
                 eq(region), any(LocalDate.class), any(LocalDate.class), any(Pageable.class)))
                 .thenReturn(pageResult);
 
@@ -146,7 +142,7 @@ class PopupServiceTest {
 
         // then
         assertThat(result.getPopups()).hasSize(1);
-        verify(popupQueryDslRepository).findByRegionAndDateRange(
+        verify(popupRepository).findByRegionAndDateRange(
                 eq(region), any(LocalDate.class), any(LocalDate.class), any(Pageable.class));
     }
 
@@ -165,7 +161,7 @@ class PopupServiceTest {
         );
         Page<Popup> pageResult = new PageImpl<>(popups);
 
-        when(popupQueryDslRepository.findByRegionAndDateRange(
+        when(popupRepository.findByRegionAndDateRange(
                 eq(region), eq(startDate), eq(endDate), any(Pageable.class)))
                 .thenReturn(pageResult);
 
@@ -175,7 +171,7 @@ class PopupServiceTest {
 
         // then
         assertThat(result.getPopups()).hasSize(1);
-        verify(popupQueryDslRepository).findByRegionAndDateRange(
+        verify(popupRepository).findByRegionAndDateRange(
                 eq(region),eq(startDate), eq(endDate), any(Pageable.class));
     }
 
@@ -200,7 +196,7 @@ class PopupServiceTest {
                 createMockPopupForSummary(2L, "AI 추천2", PopupStatus.ONGOING),
                 createMockPopupForSummary(3L, "AI 추천3", PopupStatus.ONGOING)
         );
-        when(popupQueryDslRepository.findByIdIn(recommendedIds)).thenReturn(recommendedPopups);
+        when(popupRepository.findByIdIn(recommendedIds)).thenReturn(recommendedPopups);
 
         // 브랜드 정보 Mock
         Brand brand1 = mock(Brand.class);
@@ -221,7 +217,7 @@ class PopupServiceTest {
         verify(userUtil).isAuthenticated();
         verify(userUtil).getCurrentUserId();
         verify(aiRecommendationService).getPersonalizedRecommendations(userId, 10);
-        verify(popupQueryDslRepository).findByIdIn(recommendedIds);
+        verify(popupRepository).findByIdIn(recommendedIds);
     }
 
     @Test
@@ -235,7 +231,7 @@ class PopupServiceTest {
                 createMockPopupWithViewCount(2L, "인기 팝업2", 500L)
         );
         Page<Popup> pageResult = new PageImpl<>(popularPopups);
-        when(popupQueryDslRepository.findPopularActivePopups(any(Pageable.class)))
+        when(popupRepository.findPopularActivePopups(any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
@@ -246,7 +242,7 @@ class PopupServiceTest {
         verify(userUtil).isAuthenticated();
         verify(userUtil, never()).getCurrentUserId();
         verify(aiRecommendationService, never()).getPersonalizedRecommendations(anyLong(), anyInt());
-        verify(popupQueryDslRepository).findPopularActivePopups(any(Pageable.class));
+        verify(popupRepository).findPopularActivePopups(any(Pageable.class));
     }
 
     @Test
@@ -267,7 +263,7 @@ class PopupServiceTest {
                 createMockPopupWithViewCount(1L, "인기 팝업", 1000L)
         );
         Page<Popup> pageResult = new PageImpl<>(popularPopups);
-        when(popupQueryDslRepository.findPopularActivePopups(any(Pageable.class)))
+        when(popupRepository.findPopularActivePopups(any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
@@ -276,7 +272,7 @@ class PopupServiceTest {
         // then
         assertThat(result.getPopups()).hasSize(1);
         verify(aiRecommendationService).getPersonalizedRecommendations(userId, 10);
-        verify(popupQueryDslRepository).findPopularActivePopups(any(Pageable.class));
+        verify(popupRepository).findPopularActivePopups(any(Pageable.class));
     }
 
     @Test
@@ -296,7 +292,7 @@ class PopupServiceTest {
                 createMockPopupWithViewCount(1L, "대체 인기 팝업", 1000L)
         );
         Page<Popup> pageResult = new PageImpl<>(popularPopups);
-        when(popupQueryDslRepository.findPopularActivePopups(any(Pageable.class)))
+        when(popupRepository.findPopularActivePopups(any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
@@ -304,7 +300,7 @@ class PopupServiceTest {
 
         // then
         assertThat(result.getPopups()).hasSize(1);
-        verify(popupQueryDslRepository).findPopularActivePopups(any(Pageable.class));
+        verify(popupRepository).findPopularActivePopups(any(Pageable.class));
     }
 
     @Test
@@ -335,7 +331,7 @@ class PopupServiceTest {
                 Arrays.asList(1L, 2L), "브랜드 테스트");
         when(aiRecommendationService.getPersonalizedRecommendations(1L, 10))
                 .thenReturn(aiResponse);
-        when(popupQueryDslRepository.findByIdIn(Arrays.asList(1L, 2L)))
+        when(popupRepository.findByIdIn(Arrays.asList(1L, 2L)))
                 .thenReturn(popups);
 
         // when
@@ -393,7 +389,7 @@ class PopupServiceTest {
         );
         Page<Popup> pageResult = new PageImpl<>(similarPopups);
 
-        when(popupQueryDslRepository.findSimilarPopups(eq(categoryName), eq(excludeId), any(Pageable.class)))
+        when(popupRepository.findSimilarPopups(eq(categoryName), eq(excludeId), any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
@@ -401,7 +397,7 @@ class PopupServiceTest {
 
         // then
         assertThat(result.getPopups()).hasSize(2);
-        verify(popupQueryDslRepository).findSimilarPopups(eq(categoryName), eq(excludeId), any(Pageable.class));
+        verify(popupRepository).findSimilarPopups(eq(categoryName), eq(excludeId), any(Pageable.class));
     }
 
     @Test
@@ -415,7 +411,7 @@ class PopupServiceTest {
         );
         Page<Popup> pageResult = new PageImpl<>(recommendedPopups);
 
-        when(popupQueryDslRepository.findRecommendedPopupsByCategories(eq(categoryIds), any(Pageable.class)))
+        when(popupRepository.findRecommendedPopupsByCategories(eq(categoryIds), any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
@@ -423,7 +419,7 @@ class PopupServiceTest {
 
         // then
         assertThat(result.getPopups()).hasSize(2);
-        verify(popupQueryDslRepository).findRecommendedPopupsByCategories(eq(categoryIds), any(Pageable.class));
+        verify(popupRepository).findRecommendedPopupsByCategories(eq(categoryIds), any(Pageable.class));
     }
 
     // 카테고리 및 지역별 조회 테스트
@@ -437,7 +433,7 @@ class PopupServiceTest {
         );
         Page<Popup> pageResult = new PageImpl<>(categoryPopups);
 
-        when(popupQueryDslRepository.findByCategoryName(eq(categoryName), any(Pageable.class)))
+        when(popupRepository.findByCategoryName(eq(categoryName), any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
@@ -445,7 +441,7 @@ class PopupServiceTest {
 
         // then
         assertThat(result.getPopups()).hasSize(1);
-        verify(popupQueryDslRepository).findByCategoryName(eq(categoryName), any(Pageable.class));
+        verify(popupRepository).findByCategoryName(eq(categoryName), any(Pageable.class));
     }
 
     @Test
@@ -458,7 +454,7 @@ class PopupServiceTest {
                 createMockPopupForSummary(2L, "홍대 팝업2", PopupStatus.PLANNED)
         );
 
-        when(popupQueryDslRepository.findByRegion(eq(region)))
+        when(popupRepository.findByRegion(eq(region)))
                 .thenReturn(regionPopups);
 
         // when
@@ -466,7 +462,7 @@ class PopupServiceTest {
 
         // then
         assertThat(result).hasSize(2);
-        verify(popupQueryDslRepository).findByRegion(eq(region));
+        verify(popupRepository).findByRegion(eq(region));
     }
 
     // 유틸리티 테스트
@@ -488,14 +484,14 @@ class PopupServiceTest {
     void getAllPopups_페이지크기제한_테스트() {
         // given
         Page<Popup> pageResult = new PageImpl<>(Collections.emptyList());
-        when(popupQueryDslRepository.findAllWithStatusFilter(any(), any(Pageable.class)))
+        when(popupRepository.findAllWithStatusFilter(any(), any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
         popupService.getAllPopups(0, 200, null); // 최대값 100 초과
 
         // then - size가 100으로 제한되었는지 확인
-        verify(popupQueryDslRepository).findAllWithStatusFilter(any(), argThat(pageable ->
+        verify(popupRepository).findAllWithStatusFilter(any(), argThat(pageable ->
                 pageable.getPageSize() == 100
         ));
     }
@@ -505,14 +501,14 @@ class PopupServiceTest {
     void getAllPopups_음수페이지_테스트() {
         // given
         Page<Popup> pageResult = new PageImpl<>(Collections.emptyList());
-        when(popupQueryDslRepository.findAllWithStatusFilter(any(), any(Pageable.class)))
+        when(popupRepository.findAllWithStatusFilter(any(), any(Pageable.class)))
                 .thenReturn(pageResult);
 
         // when
         popupService.getAllPopups(-1, 20, null); // 음수 페이지
 
         // then - page가 0으로 조정되었는지 확인
-        verify(popupQueryDslRepository).findAllWithStatusFilter(any(), argThat(pageable ->
+        verify(popupRepository).findAllWithStatusFilter(any(), argThat(pageable ->
                 pageable.getPageNumber() == 0
         ));
     }

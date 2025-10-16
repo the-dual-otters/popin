@@ -11,12 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.snow.popin.domain.category.entity.QCategory.category;
 import static com.snow.popin.domain.map.entity.QVenue.venue;
@@ -25,34 +22,29 @@ import static com.snow.popin.domain.popup.entity.QTag.tag;
 
 @Repository
 @RequiredArgsConstructor
-public class PopupSearchQueryDslRepository {
+public class PopupSearchRepositoryImpl implements PopupSearchRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-    private final EntityManager entityManager;
 
-    /**
-     * 팝업 제목과 태그로 검색
-     */
-    public Page<Popup> searchByTitleAndTags(String query, Pageable pageable) {
-        if (!StringUtils.hasText(query)) {
+    @Override
+    public Page<Popup> searchByTitleAndTags(String q, Pageable pageable) {
+        if (!StringUtils.hasText(q)) {
             return new PageImpl<>(List.of(), pageable, 0);
         }
+        String lower = q.toLowerCase().trim();
 
-        String lowerQuery = query.toLowerCase().trim();
+        BooleanBuilder where = new BooleanBuilder()
+                .and(popup.title.lower().contains(lower)
+                        .or(tag.name.lower().contains(lower)));
 
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(
-                popup.title.lower().contains(lowerQuery)
-                        .or(tag.name.lower().contains(lowerQuery))
-        );
-
+        // content
         List<Popup> content = queryFactory
                 .selectDistinct(popup)
                 .from(popup)
                 .leftJoin(popup.tags, tag)
                 .leftJoin(popup.venue, venue).fetchJoin()
                 .leftJoin(popup.category, category).fetchJoin()
-                .where(builder)
+                .where(where)
                 .orderBy(
                         popup.status.when(PopupStatus.ONGOING).then(1)
                                 .when(PopupStatus.PLANNED).then(2)
@@ -64,62 +56,60 @@ public class PopupSearchQueryDslRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        // total (distinct id 기준)
         Long total = queryFactory
-                .select(popup.countDistinct())
+                .select(popup.id.countDistinct())
                 .from(popup)
                 .leftJoin(popup.tags, tag)
-                .where(builder)
+                .where(where)
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total != null ? total : 0L);
     }
 
-    /**
-     * 자동완성 검색어 조회
-     */
-    public List<String> findSuggestions(String query, int limit) {
-        if (!StringUtils.hasText(query)) {
-            return List.of();
-        }
+    @Override
+    public List<String> findSuggestions(String q, int limit) {
+        if (!StringUtils.hasText(q)) return List.of();
+        String lower = q.toLowerCase().trim();
+        List<String> out = new ArrayList<>();
 
-        String lowerQuery = query.toLowerCase().trim();
-        List<String> suggestions = new ArrayList<>();
-
-        // 제목 검색
-        List<String> startsWithTitles = queryFactory
+        // 제목: startsWith 우선
+        out.addAll(queryFactory
                 .select(popup.title)
                 .from(popup)
-                .where(popup.title.lower().startsWith(lowerQuery))
+                .where(popup.title.lower().startsWith(lower))
                 .distinct()
-                .limit(limit / 2)
-                .fetch();
-        suggestions.addAll(startsWithTitles);
+                .limit(Math.max(1, limit / 2))
+                .fetch());
 
-        List<String> containsTitles = queryFactory
+        // 제목: contains(단, startsWith는 제외)
+        out.addAll(queryFactory
                 .select(popup.title)
                 .from(popup)
-                .where(popup.title.lower().contains(lowerQuery)
-                        .and(popup.title.lower().startsWith(lowerQuery).not()))
+                .where(popup.title.lower().contains(lower)
+                        .and(popup.title.lower().startsWith(lower).not()))
                 .distinct()
-                .limit(limit / 2)
-                .fetch();
-        suggestions.addAll(containsTitles);
+                .limit(Math.max(1, limit / 2))
+                .fetch());
 
-        // 태그 검색
-        suggestions.addAll(queryFactory
+        // 태그
+        out.addAll(queryFactory
                 .select(tag.name)
                 .from(popup)
                 .join(popup.tags, tag)
-                .where(tag.name.lower().contains(lowerQuery))
+                .where(tag.name.lower().contains(lower))
                 .distinct()
-                .limit(limit / 2)
+                .limit(Math.max(1, limit / 2))
                 .fetch());
 
-        return suggestions.stream()
+        // 중복 제거 + 길이 우선 정렬
+        return out.stream()
+                .filter(StringUtils::hasText)
+                .map(String::trim)
                 .distinct()
                 .sorted((a, b) -> {
-                    int lengthCompare = Integer.compare(a.length(), b.length());
-                    return lengthCompare != 0 ? lengthCompare : a.compareTo(b);
+                    int len = Integer.compare(a.length(), b.length());
+                    return len != 0 ? len : a.compareTo(b);
                 })
                 .limit(limit)
                 .collect(Collectors.toList());

@@ -40,10 +40,7 @@ class PopupRepositoryTest {
 
     @Autowired
     private PopupRepository popupRepository;
-
-    @Autowired
-    private PopupQueryDslRepository popupQueryDslRepository;
-
+    
     // 메인 페이지 필터링 메서드 테스트
     @Test
     @DisplayName("전체 팝업 조회 - 상태별 필터링")
@@ -60,7 +57,7 @@ class PopupRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        Page<Popup> result = popupQueryDslRepository.findAllWithStatusFilter(PopupStatus.ONGOING, pageable);
+        Page<Popup> result = popupRepository.findAllWithStatusFilter(PopupStatus.ONGOING, pageable);
 
         // then
         assertThat(result.getContent()).hasSize(1);
@@ -85,7 +82,7 @@ class PopupRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        Page<Popup> result = popupQueryDslRepository.findAllWithStatusFilter(null, pageable);
+        Page<Popup> result = popupRepository.findAllWithStatusFilter(null, pageable);
 
         // then
         assertThat(result.getContent()).hasSize(3);
@@ -106,7 +103,7 @@ class PopupRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        Page<Popup> result = popupQueryDslRepository.findPopularActivePopups(pageable);
+        Page<Popup> result = popupRepository.findPopularActivePopups(pageable);
 
         // then
         assertThat(result.getContent()).hasSize(2);
@@ -138,7 +135,7 @@ class PopupRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        Page<Popup> result = popupQueryDslRepository.findDeadlineSoonPopups(PopupStatus.ONGOING, pageable);
+        Page<Popup> result = popupRepository.findDeadlineSoonPopups(PopupStatus.ONGOING, pageable);
 
         // then
         assertThat(result.getContent()).hasSize(1);
@@ -169,7 +166,7 @@ class PopupRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        Page<Popup> result = popupQueryDslRepository.findByRegionAndDateRange(
+        Page<Popup> result = popupRepository.findByRegionAndDateRange(
                 "강남구", today, week, pageable);
 
         // then
@@ -192,7 +189,7 @@ class PopupRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         // when
-        Page<Popup> result = popupQueryDslRepository.findByRegionAndDateRange(
+        Page<Popup> result = popupRepository.findByRegionAndDateRange(
                 null, null, null, pageable);
 
         // then
@@ -314,7 +311,7 @@ class PopupRepositoryTest {
         entityManager.persistAndFlush(jongnoPopup);
 
         // when
-        List<Popup> result = popupQueryDslRepository.findByRegion("강남구");
+        List<Popup> result = popupRepository.findByRegion("강남구");
 
         // then
         assertThat(result).hasSize(2);
@@ -350,7 +347,7 @@ class PopupRepositoryTest {
         entityManager.flush();
 
         // when
-        List<Popup> result = popupQueryDslRepository.findPopupsToUpdateToOngoing(today);
+        List<Popup> result = popupRepository.findPopupsToUpdateToOngoing(today);
 
         // then
         assertThat(result).hasSize(2);
@@ -381,7 +378,7 @@ class PopupRepositoryTest {
         entityManager.flush();
 
         // when
-        List<Popup> result = popupQueryDslRepository.findPopupsToUpdateToEnded(today);
+        List<Popup> result = popupRepository.findPopupsToUpdateToEnded(today);
 
         // then
         assertThat(result).hasSize(1);
@@ -481,7 +478,7 @@ class PopupRepositoryTest {
         List<Long> aiRecommendedIds = Arrays.asList(popup1.getId(), popup2.getId());
 
         // when
-        List<Popup> result = popupQueryDslRepository.findByIdIn(aiRecommendedIds);
+        List<Popup> result = popupRepository.findByIdIn(aiRecommendedIds);
 
         // then
         assertThat(result).hasSize(2);
@@ -500,7 +497,7 @@ class PopupRepositoryTest {
         List<Long> emptyIds = Arrays.asList();
 
         // when
-        List<Popup> result = popupQueryDslRepository.findByIdIn(emptyIds);
+        List<Popup> result = popupRepository.findByIdIn(emptyIds);
 
         // then
         assertThat(result).isEmpty();
@@ -513,7 +510,7 @@ class PopupRepositoryTest {
         List<Long> nonExistentIds = Arrays.asList(999L, 998L);
 
         // when
-        List<Popup> result = popupQueryDslRepository.findByIdIn(nonExistentIds);
+        List<Popup> result = popupRepository.findByIdIn(nonExistentIds);
 
         // then
         assertThat(result).isEmpty();

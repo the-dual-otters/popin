@@ -5,7 +5,6 @@ import com.snow.popin.domain.mypage.host.repository.BrandRepository;
 import com.snow.popin.domain.popup.dto.response.*;
 import com.snow.popin.domain.popup.entity.Popup;
 import com.snow.popin.domain.popup.entity.PopupStatus;
-import com.snow.popin.domain.popup.repository.PopupQueryDslRepository;
 import com.snow.popin.domain.popup.repository.PopupRepository;
 import com.snow.popin.domain.recommendation.dto.AiRecommendationResponseDto;
 import com.snow.popin.domain.recommendation.service.AiRecommendationService;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 public class PopupService {
 
     private final PopupRepository popupRepository;
-    private final PopupQueryDslRepository popupQueryDslRepository;
     private final AiRecommendationService aiRecommendationService;
     private final BrandRepository brandRepository;
     private final UserUtil userUtil;
@@ -40,7 +38,7 @@ public class PopupService {
         log.info("전체 팝업 조회 - page: {}, size: {}, status: {}", page, size, status);
 
         Pageable pageable = createPageable(page, size);
-        Page<Popup> popupPage = popupQueryDslRepository.findAllWithStatusFilter(status, pageable);
+        Page<Popup> popupPage = popupRepository.findAllWithStatusFilter(status, pageable);
 
         List<PopupSummaryResponseDto> popupDtos = convertToSummaryDtos(popupPage.getContent());
 
@@ -64,7 +62,7 @@ public class PopupService {
         Pageable pageable = createPageable(page, adjustedSize);
 
         // 진행중/예정 상태만 조회하는 새 메서드 사용
-        Page<Popup> popupPage = popupQueryDslRepository.findPopularActivePopups(pageable);
+        Page<Popup> popupPage = popupRepository.findPopularActivePopups(pageable);
 
         List<PopupSummaryResponseDto> popupDtos = popupPage.getContent()
                 .stream()
@@ -81,7 +79,7 @@ public class PopupService {
         log.info("마감임박 팝업 조회 - page: {}, size: {}, status: {}", page, size, status);
 
         Pageable pageable = createPageable(page, size);
-        Page<Popup> popupPage = popupQueryDslRepository.findDeadlineSoonPopups(status, pageable);
+        Page<Popup> popupPage = popupRepository.findDeadlineSoonPopups(status, pageable);
 
         List<PopupSummaryResponseDto> popupDtos = convertToSummaryDtos(popupPage.getContent());
 
@@ -105,7 +103,7 @@ public class PopupService {
         Pageable pageable = createPageable(page, size);
 
         // status 파라미터 제거하고 호출
-        Page<Popup> popupPage = popupQueryDslRepository.findByRegionAndDateRange(
+        Page<Popup> popupPage = popupRepository.findByRegionAndDateRange(
                 region, startDate, endDate, pageable);
 
         List<PopupSummaryResponseDto> popupDtos = convertToSummaryDtos(popupPage.getContent());
@@ -142,7 +140,7 @@ public class PopupService {
             }
 
             // 추천된 팝업 ID로 팝업 조회
-            List<Popup> recommendedPopups = popupQueryDslRepository.findByIdIn(
+            List<Popup> recommendedPopups = popupRepository.findByIdIn(
                     aiRecommendation.getRecommendedPopupIds()
             );
 
@@ -278,7 +276,7 @@ public class PopupService {
 
         try {
             Pageable pageable = createPageable(page, size);
-            Page<Popup> popupPage = popupQueryDslRepository.findSimilarPopups(categoryName, excludePopupId, pageable);
+            Page<Popup> popupPage = popupRepository.findSimilarPopups(categoryName, excludePopupId, pageable);
 
             List<PopupSummaryResponseDto> popupDtos = convertToSummaryDtos(popupPage.getContent());
 
@@ -302,7 +300,7 @@ public class PopupService {
             return PopupListResponseDto.of(emptyPage, List.of());
         }
 
-        Page<Popup> popupPage = popupQueryDslRepository.findRecommendedPopupsByCategories(categoryIds, pageable);
+        Page<Popup> popupPage = popupRepository.findRecommendedPopupsByCategories(categoryIds, pageable);
 
         List<PopupSummaryResponseDto> popupDtos = convertToSummaryDtos(popupPage.getContent());
 
@@ -318,7 +316,7 @@ public class PopupService {
 
         try {
             Pageable pageable = createPageable(page, size);
-            Page<Popup> popupPage = popupQueryDslRepository.findByCategoryName(categoryName, pageable);
+            Page<Popup> popupPage = popupRepository.findByCategoryName(categoryName, pageable);
 
             List<PopupSummaryResponseDto> popupDtos = convertToSummaryDtos(popupPage.getContent());
 
@@ -335,7 +333,7 @@ public class PopupService {
     public List<PopupSummaryResponseDto> getPopupsByRegion(String region) {
         log.info("지역별 팝업 조회 - region: {}", region);
 
-        List<Popup> popups = popupQueryDslRepository.findByRegion(region);
+        List<Popup> popups = popupRepository.findByRegion(region);
 
         return popups.stream()
                 .map(PopupSummaryResponseDto::from)

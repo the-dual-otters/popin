@@ -3,14 +3,13 @@ package com.snow.popin.domain.popup.service;
 import com.snow.popin.domain.popup.dto.request.PopupSearchRequestDto;
 import com.snow.popin.domain.popup.dto.response.*;
 import com.snow.popin.domain.popup.entity.Popup;
-import com.snow.popin.domain.popup.repository.PopupSearchQueryDslRepository;
+import com.snow.popin.domain.popup.repository.PopupSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PopupSearchService {
 
-    private final PopupSearchQueryDslRepository popupSearchQueryDslRepository;
+    private final PopupSearchRepository popupSearchRepository;
 
     /**
      * 팝업 검색 (제목 + 태그)
@@ -39,7 +38,7 @@ public class PopupSearchService {
                 query, request.getPage(), request.getSize());
 
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
-        Page<Popup> popupPage = popupSearchQueryDslRepository.searchByTitleAndTags(query, pageable);
+        Page<Popup> popupPage = popupSearchRepository.searchByTitleAndTags(query, pageable);
 
         List<PopupSummaryResponseDto> popupDtos = popupPage.getContent()
                 .stream()
@@ -64,7 +63,7 @@ public class PopupSearchService {
         log.info("자동완성 조회 - query: '{}'", processedQuery);
 
         try {
-            List<String> suggestions = popupSearchQueryDslRepository.findSuggestions(processedQuery, 8);
+            List<String> suggestions = popupSearchRepository.findSuggestions(processedQuery, 8);
 
             List<AutocompleteSuggestionDto> suggestionDtos = suggestions.stream()
                     .map(suggestion -> AutocompleteSuggestionDto.of(suggestion, "suggestion", 0L))
