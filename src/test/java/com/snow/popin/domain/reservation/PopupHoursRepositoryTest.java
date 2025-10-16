@@ -34,10 +34,10 @@ class PopupHoursRepositoryTest {
 
     @Test
     @DisplayName("팝업 ID로 운영시간 조회")
-    void findByPopupId() {
+    void findByPopup_Id() {
         // when
-        List<PopupHours> popup1Hours = popupHoursRepository.findByPopupId(1L);
-        List<PopupHours> popup2Hours = popupHoursRepository.findByPopupId(2L);
+        List<PopupHours> popup1Hours = popupHoursRepository.findByPopup_Id(1L);
+        List<PopupHours> popup2Hours = popupHoursRepository.findByPopup_Id(2L);
 
         // then
         assertThat(popup1Hours).hasSize(5); // 월~금
@@ -57,11 +57,11 @@ class PopupHoursRepositoryTest {
 
     @Test
     @DisplayName("팝업 ID와 요일로 운영시간 조회")
-    void findByPopupIdAndDayOfWeek() {
+    void findByPopup_IdAndDayOfWeek() {
         // when
-        List<PopupHours> mondayHours = popupHoursRepository.findByPopupIdAndDayOfWeek(1L, 1); // 월요일
-        List<PopupHours> saturdayHours = popupHoursRepository.findByPopupIdAndDayOfWeek(2L, 6); // 토요일
-        List<PopupHours> popup1SundayHours = popupHoursRepository.findByPopupIdAndDayOfWeek(1L, 0); // 팝업1은 일요일 운영 안함
+        List<PopupHours> mondayHours = popupHoursRepository.findByPopup_IdAndDayOfWeek(1L, 1); // 월요일
+        List<PopupHours> saturdayHours = popupHoursRepository.findByPopup_IdAndDayOfWeek(2L, 6); // 토요일
+        List<PopupHours> popup1SundayHours = popupHoursRepository.findByPopup_IdAndDayOfWeek(1L, 0); // 팝업1은 일요일 운영 안함
 
         // then
         assertThat(mondayHours).hasSize(1);
@@ -89,40 +89,40 @@ class PopupHoursRepositoryTest {
 
     @Test
     @DisplayName("특정 요일에 운영하는지 확인")
-    void existsByPopupIdAndDayOfWeek() {
+    void existsByPopup_IdAndDayOfWeek() {
         // when & then
-        assertThat(popupHoursRepository.existsByPopupIdAndDayOfWeek(1L, 1)).isTrue(); // 팝업1, 월요일
-        assertThat(popupHoursRepository.existsByPopupIdAndDayOfWeek(1L, 0)).isFalse(); // 팝업1, 일요일
-        assertThat(popupHoursRepository.existsByPopupIdAndDayOfWeek(2L, 6)).isTrue(); // 팝업2, 토요일
-        assertThat(popupHoursRepository.existsByPopupIdAndDayOfWeek(2L, 1)).isFalse(); // 팝업2, 월요일
+        assertThat(popupHoursRepository.existsByPopup_IdAndDayOfWeek(1L, 1)).isTrue(); // 팝업1, 월요일
+        assertThat(popupHoursRepository.existsByPopup_IdAndDayOfWeek(1L, 0)).isFalse(); // 팝업1, 일요일
+        assertThat(popupHoursRepository.existsByPopup_IdAndDayOfWeek(2L, 6)).isTrue(); // 팝업2, 토요일
+        assertThat(popupHoursRepository.existsByPopup_IdAndDayOfWeek(2L, 1)).isFalse(); // 팝업2, 월요일
     }
 
     @Test
     @DisplayName("팝업 ID로 운영시간 삭제")
-    void deleteByPopupId() {
+    void deleteByPopup_Id() {
         // given
-        assertThat(popupHoursRepository.findByPopupId(1L)).hasSize(5);
+        assertThat(popupHoursRepository.findByPopup_Id(1L)).hasSize(5);
 
         // when
-        popupHoursRepository.deleteByPopupId(1L);
+        popupHoursRepository.deleteByPopup_Id(1L);
         entityManager.flush(); // 삭제 쿼리 즉시 실행
 
         // then
-        assertThat(popupHoursRepository.findByPopupId(1L)).isEmpty();
-        assertThat(popupHoursRepository.findByPopupId(2L)).hasSize(2); // 다른 팝업은 영향 없음
+        assertThat(popupHoursRepository.findByPopup_Id(1L)).isEmpty();
+        assertThat(popupHoursRepository.findByPopup_Id(2L)).hasSize(2); // 다른 팝업은 영향 없음
     }
 
     @Test
     @DisplayName("존재하지 않는 팝업 ID로 조회시 빈 리스트 반환")
     void findByNonExistentPopupId() {
         // when
-        List<PopupHours> hours = popupHoursRepository.findByPopupId(999L);
+        List<PopupHours> hours = popupHoursRepository.findByPopup_Id(999L);
         List<Integer> days = popupHoursRepository.findDistinctDayOfWeekByPopupId(999L);
 
         // then
         assertThat(hours).isEmpty();
         assertThat(days).isEmpty();
-        assertThat(popupHoursRepository.existsByPopupIdAndDayOfWeek(999L, 1)).isFalse();
+        assertThat(popupHoursRepository.existsByPopup_IdAndDayOfWeek(999L, 1)).isFalse();
     }
 
     private void insertTestData() {

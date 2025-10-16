@@ -35,7 +35,7 @@ public class AdminMissionSetService {
     public Page<MissionSetAdminDto> getMissionSets(Pageable pageable, Long popupId, MissionSetStatus status) {
         Page<MissionSet> sets;
         if (popupId != null) {
-            sets = missionSetRepository.findByPopupId(popupId, pageable);
+            sets = missionSetRepository.findByPopup_Id(popupId, pageable);
         } else if (status != null) {
             sets = missionSetRepository.findByStatus(status, pageable);
         } else {

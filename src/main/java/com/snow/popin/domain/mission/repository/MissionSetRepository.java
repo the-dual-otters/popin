@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface MissionSetRepository extends JpaRepository<MissionSet, UUID>, MissionSetRepositoryCustom {
-    Page<MissionSet> findByPopupId(Long popupId, Pageable pageable);
+    Page<MissionSet> findByPopup_Id(Long popupId, Pageable pageable);
     Page<MissionSet> findByStatus(MissionSetStatus status, Pageable pageable);
 }

@@ -272,7 +272,7 @@ public class DataInitializer implements CommandLineRunner {
                 ));
 
         // 호스트 등록
-        if (!hostRepository.existsByBrandAndUser(brand, host1.getId())) {
+        if (!hostRepository.existsByBrandAndUser_Id(brand, host1.getId())) {
             hostRepository.save(Host.builder()
                     .brand(brand)
                     .user(host1)

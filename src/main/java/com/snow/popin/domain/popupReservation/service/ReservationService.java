@@ -86,7 +86,7 @@ public class ReservationService {
         Popup popup = validatePopupForReservation(popupId);
         PopupReservationSettings settings = settingsService.getSettings(popupId);
 
-        List<PopupHours> operatingHours = popupHoursRepository.findByPopupIdAndDayOfWeek(
+        List<PopupHours> operatingHours = popupHoursRepository.findByPopup_IdAndDayOfWeek(
                 popupId, date.getDayOfWeek().getValue() % 7
         );
 
@@ -330,7 +330,7 @@ public class ReservationService {
         PopupReservationSettings settings = settingsService.getSettings(popupId);
 
         List<AvailableSlotDto> slots = new ArrayList<>();
-        List<PopupHours> hoursList = popupHoursRepository.findByPopupIdAndDayOfWeek(
+        List<PopupHours> hoursList = popupHoursRepository.findByPopup_IdAndDayOfWeek(
                 popupId, date.getDayOfWeek().getValue() % 7);
 
         for (PopupHours hours : hoursList) {
@@ -422,7 +422,7 @@ public class ReservationService {
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "브랜드가 존재하지 않습니다.");
                 });
 
-        boolean isMember = hostRepository.existsByBrandAndUser(brand, currentUser.getId());
+        boolean isMember = hostRepository.existsByBrandAndUser_Id(brand, currentUser.getId());
         if (!isMember) {
             log.warn("[ReservationService] 호스트 권한 없음: popupId={}, userId={}", popupId, currentUser.getId());
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권한이 없습니다.");
@@ -445,7 +445,7 @@ public class ReservationService {
     }
 
     private boolean hasOperatingHours(Long popupId, LocalDate date) {
-        return !popupHoursRepository.findByPopupIdAndDayOfWeek(
+        return !popupHoursRepository.findByPopup_IdAndDayOfWeek(
                 popupId, date.getDayOfWeek().getValue() % 7
         ).isEmpty();
     }

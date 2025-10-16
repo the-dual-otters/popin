@@ -37,7 +37,7 @@ public class PopupReservationSettingsService {
     public PopupReservationSettings getSettings(Long popupId) {
         log.info("[PopupReservationSettingsService] 예약 설정 조회 요청: popupId={}", popupId);
 
-        PopupReservationSettings settings = settingsRepository.findByPopupId(popupId)
+        PopupReservationSettings settings = settingsRepository.findByPopup_Id(popupId)
                 .orElseGet(() -> createDefaultSettings(popupId));
 
         PopupReservationSettings applied = applyDefaults(settings);
@@ -127,7 +127,7 @@ public class PopupReservationSettingsService {
         Brand brand = brandRepository.findById(popup.getBrandId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "브랜드가 존재하지 않습니다."));
 
-        boolean isMember = hostRepository.existsByBrandAndUser(brand, currentUser.getId());
+        boolean isMember = hostRepository.existsByBrandAndUser_Id(brand, currentUser.getId());
         if (!isMember) {
             log.warn("[PopupReservationSettingsService] 권한 없음: popupId={}, userId={}", popupId, currentUser.getId());
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "예약 설정을 변경할 권한이 없습니다.");

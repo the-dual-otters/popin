@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface PopupReservationSettingsRepository extends JpaRepository<PopupReservationSettings, Long> {
 
-    Optional<PopupReservationSettings> findByPopupId(Long popupId);
+    Optional<PopupReservationSettings> findByPopup_Id(Long popupId);
 }

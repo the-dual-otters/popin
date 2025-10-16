@@ -9,10 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
-
-    // 태그 이름으로 조회
-    Optional<Tag> findByName(String name);
-
-    // 태그 이름 리스트로 조회
-    List<Tag> findByNameIn(List<String> names);
 }

@@ -53,7 +53,7 @@ public class RewardService {
         }
 
         // 옵션 잠금 + 재고 차감
-        RewardOption opt = rewardOptionRepository.lockById(optionId)
+        RewardOption opt = rewardOptionRepository.findById(optionId)
                 .orElseThrow(RewardException.OptionNotFound::new);
 
         if (!opt.getMissionSet().getId().equals(missionSetId)) {

@@ -269,7 +269,7 @@ class ReviewServiceTest {
         );
         Page<Review> mockPage = new PageImpl<>(mockReviews, pageable, 2);
 
-        given(reviewRepository.findByPopupIdAndIsBlockedFalse(popupId, pageable))
+        given(reviewRepository.findByPopup_IdAndIsBlockedFalse(popupId, pageable))
                 .willReturn(mockPage);
 
         // when
@@ -377,7 +377,7 @@ class ReviewServiceTest {
         Long userId = 1L;
         Review mockReview = createTestReview(1L, userId, popupId);
 
-        given(reviewRepository.findByPopupIdAndUserId(popupId, userId)).willReturn(Optional.of(mockReview));
+        given(reviewRepository.findByPopup_IdAndUserId(popupId, userId)).willReturn(Optional.of(mockReview));
 
         // when
         ReviewResponseDto result = reviewService.getUserReviewForPopup(popupId, userId);
@@ -395,7 +395,7 @@ class ReviewServiceTest {
         Long popupId = 1L;
         Long userId = 1L;
 
-        given(reviewRepository.findByPopupIdAndUserId(popupId, userId)).willReturn(Optional.empty());
+        given(reviewRepository.findByPopup_IdAndUserId(popupId, userId)).willReturn(Optional.empty());
 
         // when & then
         assertThatThrownBy(() -> reviewService.getUserReviewForPopup(popupId, userId))

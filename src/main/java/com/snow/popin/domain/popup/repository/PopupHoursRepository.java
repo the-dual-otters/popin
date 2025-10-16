@@ -2,29 +2,30 @@ package com.snow.popin.domain.popup.repository;
 
 import com.snow.popin.domain.popup.entity.PopupHours;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Repository
 public interface PopupHoursRepository extends JpaRepository<PopupHours, Long> {
-    @Query("SELECT ph FROM PopupHours ph WHERE ph.popup.id = :popupId")
-    List<PopupHours> findByPopupId(@Param("popupId") Long popupId);
 
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    // 전체 운영시간 (popup.id 경로)
+    List<PopupHours> findByPopup_Id(Long popupId);
+
+    // 요일별 운영시간
+    List<PopupHours> findByPopup_IdAndDayOfWeek(Long popupId, Integer dayOfWeek);
+
+    // 존재 여부
+    boolean existsByPopup_IdAndDayOfWeek(Long popupId, Integer dayOfWeek);
+
+    // 삭제: 파생 deleteBy면 @Modifying 불필요 (반환값 = 삭제된 행 수)
     @Transactional
-    @Query("DELETE FROM PopupHours ph WHERE ph.popup.id = :popupId")
-    int deleteByPopupId(@Param("popupId") Long popupId);
+    long deleteByPopup_Id(Long popupId);
 
-    // 특정 팝업의 특정 요일에 대한 운영시간 조회
-    List<PopupHours> findByPopupIdAndDayOfWeek(Long popupId, Integer dayOfWeek);
-
-    // 특정 팝업의 운영 요일 목록 조회
-    @Query("SELECT DISTINCT p.dayOfWeek FROM PopupHours p WHERE p.popup.id = :popupId ORDER BY p.dayOfWeek ASC")
+    // 운영 요일 목록 (distinct + 정렬만 필요해서 @Query 한 줄)
+    @Query("select distinct ph.dayOfWeek from PopupHours ph where ph.popup.id = :popupId order by ph.dayOfWeek asc")
     List<Integer> findDistinctDayOfWeekByPopupId(@Param("popupId") Long popupId);
-
-    // 특정 팝업이 특정 요일에 운영하는지 확인
-    boolean existsByPopupIdAndDayOfWeek(Long popupId, Integer dayOfWeek);
 }

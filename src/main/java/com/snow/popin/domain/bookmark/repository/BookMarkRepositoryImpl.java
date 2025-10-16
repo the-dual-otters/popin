@@ -17,13 +17,11 @@ import static com.snow.popin.domain.category.entity.QCategory.category;
 
 @Repository
 @RequiredArgsConstructor
-public class BookMarkQueryDslRepository {
+public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    /**
-     * 사용자별 북마크 목록 조회 (페이징)
-     */
+    @Override
     public Page<BookMark> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable) {
         List<BookMark> content = queryFactory
                 .selectFrom(bookMark)
@@ -45,9 +43,7 @@ public class BookMarkQueryDslRepository {
         return new PageImpl<>(content, pageable, total != null ? total : 0L);
     }
 
-    /**
-     * 사용자의 북마크한 팝업 ID 목록 조회
-     */
+    @Override
     public List<Long> findPopupIdsByUserId(Long userId) {
         return queryFactory
                 .select(bookMark.popupId)

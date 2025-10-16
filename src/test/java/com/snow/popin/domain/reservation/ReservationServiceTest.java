@@ -87,7 +87,7 @@ public class ReservationServiceTest {
         when(popupRepository.findById(anyLong())).thenReturn(Optional.of(popup));
         when(settingsService.getSettings(anyLong())).thenReturn(settings);
         when(reservationQueryDslRepository.existsActiveReservationByPopupAndUser(any(Popup.class), any(User.class))).thenReturn(false);
-        when(popupHoursRepository.findByPopupIdAndDayOfWeek(anyLong(), any(Integer.class))).thenReturn(List.of(createTestPopupHours(popup)));
+        when(popupHoursRepository.findByPopup_IdAndDayOfWeek(anyLong(), any(Integer.class))).thenReturn(List.of(createTestPopupHours(popup)));
         when(reservationQueryDslRepository.sumPartySizeByPopupAndReservationDateBetween(any(Popup.class), any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(0L);
 
         when(reservationRepository.save(any(Reservation.class))).thenAnswer((Answer<Reservation>) invocation -> {
@@ -169,7 +169,7 @@ public class ReservationServiceTest {
         when(popupRepository.findById(anyLong())).thenReturn(Optional.of(popup));
         when(settingsService.getSettings(anyLong())).thenReturn(settings);
         when(reservationQueryDslRepository.existsActiveReservationByPopupAndUser(any(Popup.class), any(User.class))).thenReturn(false);
-        when(popupHoursRepository.findByPopupIdAndDayOfWeek(anyLong(), any(Integer.class))).thenReturn(List.of(createTestPopupHours(popup)));
+        when(popupHoursRepository.findByPopup_IdAndDayOfWeek(anyLong(), any(Integer.class))).thenReturn(List.of(createTestPopupHours(popup)));
 
         // when & then
         assertThrows(ResponseStatusException.class, () -> {
@@ -187,7 +187,7 @@ public class ReservationServiceTest {
 
         when(popupRepository.findById(anyLong())).thenReturn(Optional.of(popup));
         when(brandRepository.findById(anyLong())).thenReturn(Optional.of(brand));
-        when(hostRepository.existsByBrandAndUser(any(Brand.class), anyLong())).thenReturn(true);
+        when(hostRepository.existsByBrandAndUser_Id(any(Brand.class), anyLong())).thenReturn(true);
         when(reservationRepository.findByPopup(any(Popup.class))).thenReturn(Collections.singletonList(createTestReservation(user, popup)));
 
         // when
@@ -247,7 +247,7 @@ public class ReservationServiceTest {
         when(reservationRepository.findById(anyLong())).thenReturn(Optional.of(reservation));
         when(popupRepository.findById(anyLong())).thenReturn(Optional.of(popup));
         when(brandRepository.findById(anyLong())).thenReturn(Optional.of(brand));
-        when(hostRepository.existsByBrandAndUser(any(Brand.class), anyLong())).thenReturn(true);
+        when(hostRepository.existsByBrandAndUser_Id(any(Brand.class), anyLong())).thenReturn(true);
 
         // when
         reservationService.markAsVisited(1L, user);
@@ -265,7 +265,7 @@ public class ReservationServiceTest {
 
         when(popupRepository.findById(anyLong())).thenReturn(Optional.of(popup));
         when(settingsService.getSettings(anyLong())).thenReturn(settings);
-        when(popupHoursRepository.findByPopupIdAndDayOfWeek(anyLong(), any(Integer.class))).thenReturn(List.of(createTestPopupHours(popup)));
+        when(popupHoursRepository.findByPopup_IdAndDayOfWeek(anyLong(), any(Integer.class))).thenReturn(List.of(createTestPopupHours(popup)));
 
         // when
         List<LocalDate> availableDates = reservationService.getAvailableDates(1L);
@@ -283,7 +283,7 @@ public class ReservationServiceTest {
 
         when(popupRepository.findById(anyLong())).thenReturn(Optional.of(popup));
         when(settingsService.getSettings(anyLong())).thenReturn(settings);
-        when(popupHoursRepository.findByPopupIdAndDayOfWeek(anyLong(), any(Integer.class))).thenReturn(List.of(createTestPopupHours(popup)));
+        when(popupHoursRepository.findByPopup_IdAndDayOfWeek(anyLong(), any(Integer.class))).thenReturn(List.of(createTestPopupHours(popup)));
         when(reservationQueryDslRepository.sumPartySizeByPopupAndReservationDateBetween(any(Popup.class), any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(0L);
 
         // when

@@ -24,10 +24,6 @@ public interface  InquiryRepository extends JpaRepository<Inquiry, Long> {
     Page<Inquiry> findByTargetTypeAndStatusOrderByCreatedAtDesc(
             TargetType targetType, InquiryStatus status, Pageable pageable);
 
-    // 특정 대상에 대한 신고 조회
-    List<Inquiry> findByTargetTypeAndTargetIdOrderByCreatedAtDesc(
-            TargetType targetType, Long targetId);
-
     // 대상 유형별 신고 개수 조회
     long countByTargetType(TargetType targetType);
 
@@ -39,13 +35,4 @@ public interface  InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     // 이메일로 신고 조회
     Page<Inquiry> findByEmailOrderByCreatedAtDesc(String email, Pageable pageable);
-
-    // 최근 신고 조회
-    @Query("SELECT i FROM Inquiry i ORDER BY i.createdAt DESC")
-    List<Inquiry> findRecentInquiries(Pageable pageable);
-
-    // 처리 대기 중인 신고 조회
-    @Query("SELECT i FROM Inquiry i WHERE i.status = 'OPEN' ORDER BY i.createdAt ASC")
-    List<Inquiry> findPendingInquiries(Pageable pageable);
-
 }
