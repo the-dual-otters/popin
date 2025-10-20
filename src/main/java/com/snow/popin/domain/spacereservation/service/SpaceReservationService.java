@@ -68,6 +68,16 @@ public class SpaceReservationService {
         Popup popup = popupRepository.findById(dto.getPopupId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팝업입니다."));
 
+        long overlappingCount = reservationRepository.countOverlappingReservations(
+                space, dto.getStartDate(), dto.getEndDate()
+        );
+
+        if (overlappingCount > 0) {
+            log.warn("[SpaceReservationService] 예약 날짜 중복: spaceId={}, startDate={}, endDate={}, overlapping={}",
+                    space.getId(), dto.getStartDate(), dto.getEndDate(), overlappingCount);
+            throw new IllegalStateException("해당 기간에 이미 승인된 예약이 있습니다.");
+        }
+
         SpaceReservation reservation = SpaceReservation.builder()
                 .space(space)
                 .host(user)

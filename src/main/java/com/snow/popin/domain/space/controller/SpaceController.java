@@ -92,10 +92,7 @@ public class SpaceController {
      */
     @GetMapping("/{id}")
     public SpaceResponseDto getDetail(@PathVariable Long id) {
-        User me = null;
-        if (userUtil.isAuthenticated()) {
-            me = userUtil.getCurrentUser();
-        }
+        User me = userUtil.getCurrentUser();
         log.info("[SpaceController] 공간 상세 조회 요청: userId={}, spaceId={}", me != null ? me.getId() : null, id);
         SpaceResponseDto dto = spaceService.getDetail(me, id);
         log.info("[SpaceController] 공간 상세 조회 완료: spaceId={}", id);
