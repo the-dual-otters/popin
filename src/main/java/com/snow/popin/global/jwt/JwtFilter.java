@@ -106,7 +106,6 @@ public class JwtFilter extends OncePerRequestFilter {
         // 공개 API - GET 요청만!
         if ("GET".equals(method)) {
             if (path.startsWith("/api/popups")
-                    || path.startsWith("/api/spaces")
                     || path.startsWith("/api/reviews")
                     || path.startsWith("/api/venues")) {
                 return true;

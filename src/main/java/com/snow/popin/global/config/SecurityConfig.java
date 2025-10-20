@@ -64,7 +64,6 @@ public class SecurityConfig {
 
                         // === 공개 API (GET만) ===
                         .antMatchers(HttpMethod.GET, "/api/popups/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/api/spaces/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/venues/**").permitAll()
 
@@ -77,6 +76,7 @@ public class SecurityConfig {
 
                         // 인증 관련 API
                         .antMatchers("/auth/**", "/api/auth/**").permitAll()
+
                         //  OAuth2 로그인 관련 경로 추가
                         .antMatchers("/oauth2/**", "/login/**", "/auth/success").permitAll()
 
@@ -90,6 +90,9 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.POST, "/api/popups/**").authenticated()
                         .antMatchers(HttpMethod.PUT, "/api/popups/**").authenticated()
                         .antMatchers(HttpMethod.DELETE, "/api/popups/**").authenticated()
+                        .antMatchers(HttpMethod.POST, "/api/spaces/**").authenticated()
+                        .antMatchers(HttpMethod.PUT, "/api/spaces/**").authenticated()
+                        .antMatchers(HttpMethod.DELETE, "/api/spaces/**").authenticated()
                         .antMatchers("/api/bookmarks/**").authenticated()
                         .antMatchers("/api/reservations/**").authenticated()
                         .antMatchers("/api/host/**").authenticated()
